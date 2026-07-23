@@ -34,6 +34,8 @@ Generic utilities for `IPlayer`, such as unsticking players from geometry and qu
 
 Static helpers that generate collections of `Vector2` points along common shapes — trails, circles, squares/polygons, swirls and waves — plus a random-in-area generator. Each method invokes a callback for every produced point, so they can be used to drive effects, spawns, or any point-wise operation. Includes a `DegreesToRadians` conversion helper.
 
+<img alt="PointShape" src="https://github.com/user-attachments/assets/9f7a7bd4-01e1-4c7e-a403-568b272d2d4c" />
+
 ## [Vector2Helper](Vector2Helper.cs)
 
 A math utility class for `Vector2` offering operations not built into the SFD API: angles, dot/cross products, reflection and bouncing, projection, rotation, clamping, length limiting, move-toward, and more. Also exposes the `Up`/`Down`/`Left`/`Right` unit vectors.
