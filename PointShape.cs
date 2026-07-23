@@ -154,6 +154,11 @@ public partial class GameScript : GameScriptInterfaceExtended
             return randomV;
         }
 
+        /// <summary>
+        /// Converts an angle measured in degrees into radians.
+        /// </summary>
+        /// <param name="degrees">The angle in degrees to convert.</param>
+        /// <returns>The equivalent angle in radians.</returns>
         public static float DegreesToRadians(float degrees) => degrees * MathHelper.PI / 180f;
     }
 }

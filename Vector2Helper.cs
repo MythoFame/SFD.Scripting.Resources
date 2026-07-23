@@ -9,9 +9,13 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// </summary>
     public static class Vector2Helper
     {
+        /// <summary>Unit vector pointing upward (0, 1).</summary>
         public static readonly Vector2 Up = new(0, 1);
+        /// <summary>Unit vector pointing downward (0, -1).</summary>
         public static readonly Vector2 Down = new(0, -1);
+        /// <summary>Unit vector pointing to the right (1, 0).</summary>
         public static readonly Vector2 Right = new(1, 0);
+        /// <summary>Unit vector pointing to the left (-1, 0).</summary>
         public static readonly Vector2 Left = new(-1, 0);
 
         /// <summary>
