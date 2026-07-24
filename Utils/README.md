@@ -1,12 +1,12 @@
 <div align="center">
 
-[![Superfighters Deluxe Logo](tools/.github/assets/SFD_titleLoop.gif)](https://www.superfightersdeluxe.com)
+[![Superfighters Deluxe Logo](../.github/assets/SFD_titleLoop.gif)](https://store.steampowered.com/app/855860)
 
 # Superfighters Deluxe Scripting Resources
 
 Resources, utilities, helper libraries, and code snippets for developing scripts for Superfighters Deluxe.
 
-[![GitHub License](https://img.shields.io/github/license/MythoFame/SFD.Scripting.Resources)](LICENSE.txt)
+[![License](https://img.shields.io/github/license/dsafxP/SFD.ScriptTools)](../LICENSE.txt)
 
 </div>
 
@@ -62,9 +62,8 @@ Generic utilities for `IPlayer`, such as unsticking players from geometry and qu
 
 Static helpers that generate collections of `Vector2` points along common shapes — trails, circles, squares/polygons, swirls and waves — plus a random-in-area generator. Each method invokes a callback for every produced point, so they can be used to drive effects, spawns, or any point-wise operation. Includes a `DegreesToRadians` conversion helper.
 
-<img alt="PointShape" src="https://github.com/user-attachments/assets/9f7a7bd4-01e1-4c7e-a403-568b272d2d4c" />
+<img alt="PointShape" src="../.github/assets/Shape.gif" />
 
 ## [Vector2Helper](Vector2Helper.cs)
 
 A math utility class for `Vector2` offering operations not built into the SFD API: angles, dot/cross products, reflection and bouncing, projection, rotation, clamping, length limiting, move-toward, and more. Also exposes the `Up`/`Down`/`Left`/`Right` unit vectors.
-
