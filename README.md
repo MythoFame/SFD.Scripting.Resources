@@ -6,7 +6,7 @@
 
 Resources, utilities, helper libraries, and code snippets for developing scripts for Superfighters Deluxe.
 
-[![GitHub License](https://img.shields.io/github/license/MythoFame/SFD.Scripting.Resources)](LICENSE)
+[![GitHub License](https://img.shields.io/github/license/MythoFame/SFD.Scripting.Resources)](LICENSE.txt)
 
 </div>
 
