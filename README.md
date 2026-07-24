@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Superfighters Deluxe Logo](tools/.github/assets/SFD_titleLoop.gif)](https://store.steampowered.com/app/855860)
+[![Superfighters Deluxe Logo](https://raw.githubusercontent.com/MythoFame/.github/refs/heads/master/assets/SFD_titleLoop.gif)](https://store.steampowered.com/app/855860)
 
 # Superfighters Deluxe Scripting Resources
 
