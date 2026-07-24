@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <RequiredGameSdkVersion>1.0.0+0262223ed72c8a5fb39cb620e9fd1c0c95f39964</RequiredGameSdkVersion>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
 
@@ -7,6 +8,7 @@
         <GameSdkPath Condition="'$(GameSdkPath)' == ''">$(MSBuildThisFileDirectory)lib</GameSdkPath>
 
         <Generator>$(MSBuildThisFileDirectory)tools/SFD.ScriptTools.ScriptGenerator.fsx</Generator>
+        <Validator>$(MSBuildThisFileDirectory)tools/SFD.ScriptTools.LibrarySetup.fsx</Validator>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,10 +19,7 @@
     </ItemGroup>
 
     <Target Name="CheckSdk" BeforeTargets="ResolveReferences">
-        <Error
-            Condition="!Exists('$(GameSdkPath)/SFD.GameScriptInterface.dll')"
-            Text="SFD.GameScriptInterface.dll was not found. Set GameSdkPath or run the setup script."
-        />
+        <Exec Command="dotnet fsi $(Validator) --dry-run" />
     </Target>
 
     <Target
