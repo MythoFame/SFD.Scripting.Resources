@@ -38,14 +38,7 @@ let printUsage () =
     printfn "      --dry-run Run checks without touching the filesystem; exit 1 if action is needed"
     printfn "  -h, --help    Show this help message and exit"
 
-// fsi.CommandLineArgs[0] is the script path itself; drop it so it isn't
-// reported as an unknown argument.
-let scriptArgs =
-    let args = fsi.CommandLineArgs |> List.ofArray
-
-    match args with
-    | head :: rest when head.EndsWith(".fsx", StringComparison.OrdinalIgnoreCase) -> rest
-    | _ -> args
+let scriptArgs = fsi.CommandLineArgs |> List.ofArray
 
 type ParsedArgs =
     { File: string option
