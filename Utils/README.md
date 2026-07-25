@@ -38,6 +38,10 @@ A generic factory helper that instantiates a `Type` by reflecting over its publi
 
 A fully customizable projectile that travels in a straight line, performs its own ray-cast collision each update, and fires `OnPlayerHit`/`OnObjectHit` callbacks on impact. Supports piercing (multiple hits before disabling), wallbanging through indestructible geometry, a maximum travel distance, a trailing effect, and a copy constructor for easy templating.
 
+# [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
+
+Returns a random `WeaponItem` whose `WeaponItemType` matches the given category. Internally draws random weapons via `Game.GetRandomWeaponItem` and spawns them transiently to inspect their type, retrying until a match is found.
+
 # [HomingProjectile](HomingProjectile.cs)
 
 Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Shooter` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
