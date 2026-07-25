@@ -40,5 +40,12 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// and manual aiming (see <see cref="IsManualFiring"/>).
         /// </summary>
         public static bool IsFiring(IPlayer player) => player.IsHipFiring || IsManualFiring(player);
+
+        /// <summary>
+        /// Gets whether a player currently has a ranged weapon, whether it be the
+        /// primary or secondary weapon slot.
+        /// </summary>
+        public static bool HasRangedWeapon(IPlayer player) => player.CurrentPrimaryWeapon.WeaponItem != WeaponItem.NONE ||
+          player.CurrentSecondaryWeapon.WeaponItem != WeaponItem.NONE;
     }
 }
