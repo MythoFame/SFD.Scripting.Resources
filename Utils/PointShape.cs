@@ -118,10 +118,11 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <param name="start">The starting point of the wave.</param>
         /// <param name="end">The ending point of the wave.</param>
         /// <param name="amplitude">The peak displacement of the wave, in world units, measured perpendicular to the beam.</param>
-        /// <param name="frequency">The number of full sine cycles spanning the beam. A value of 1 produces a single arch from start to end.</param>
+        /// <param name="frequency">The number of full sine cycles spanning the beam. A value of 1 produces a single arch from start to end. Integer values pin both endpoints to the centerline.</param>
         /// <param name="pointDistance">The distance between each point on the wave.</param>
+        /// <param name="phase">Phase offset (in radians) added to the sine. Animate this over time to make the wave travel along the beam.</param>
         public static void Wave(Action<Vector2> func, Vector2 start, Vector2 end,
-            float amplitude = 1, float frequency = 1, float pointDistance = 0.1f)
+            float amplitude = 1, float frequency = 1, float pointDistance = 0.1f, float phase = 0)
         {
             float totalDistance = Vector2.Distance(start, end);
 
@@ -139,7 +140,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             {
                 float alpha = (float)i / (count - 1);
                 Vector2 pos = Vector2.Lerp(start, end, alpha);
-                float offset = amplitude * MathF.Sin(alpha * frequency * 2f * MathF.PI);
+                float offset = amplitude * MathF.Sin(alpha * frequency * 2f * MathF.PI + phase);
 
                 func(pos + normal * offset);
             }
