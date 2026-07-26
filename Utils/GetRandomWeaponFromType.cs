@@ -13,19 +13,34 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// <returns>A <see cref="WeaponItem"/> whose <see cref="WeaponItemType"/> equals <paramref name="type"/>.</returns>
     public static WeaponItem GetRandomWeaponFromType(WeaponItemType type)
     {
-        WeaponItem w = Game.GetRandomWeaponItem();
+        WeaponItem w = RandomWeaponItemSafe;
 
         IObjectWeaponItem wItem = Game.SpawnWeaponItem(w,
           Vector2.Zero, false, float.Epsilon);
 
         while (wItem.WeaponItemType != type)
         {
-            w = Game.GetRandomWeaponItem();
+            w = RandomWeaponItemSafe;
 
             wItem = Game.SpawnWeaponItem(w,
               Vector2.Zero, false, float.Epsilon);
         }
 
+        wItem?.Remove();
+
         return w;
+    }
+
+    private static WeaponItem RandomWeaponItemSafe
+    {
+        get
+        {
+            WeaponItem w = Game.GetRandomWeaponItem();
+
+            while (w == WeaponItem.STREETSWEEPER)
+                w = Game.GetRandomWeaponItem();
+
+            return w;
+        }
     }
 }
