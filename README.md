@@ -23,6 +23,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `HomingProjectile`
 - `PlayerHelper`
 - `PointShape`
+- `ShowChatMessages`
 - `Vector2Helper`
 
 See [`Utils/README.md`](Utils/README.md) for detailed documentation on each utility.

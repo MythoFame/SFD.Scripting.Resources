@@ -62,6 +62,10 @@ Static helpers that generate collections of `Vector2` points along common shapes
 
 <img alt="PointShape" src="../.github/assets/Shape.gif" />
 
+# [ShowChatMessages](ShowChatMessages.cs)
+
+Batch wrapper around `Game.ShowChatMessage` that accepts an `IEnumerable<string>` of messages and displays each one as its own line in the chat. Mirrors the four overloads of the underlying API: bare, colored, user-targeted, and colored-user-targeted.
+
 # [Vector2Helper](Vector2Helper.cs)
 
 A math utility class for `Vector2` offering operations not built into the SFD API: angles, dot/cross products, reflection and bouncing, projection, rotation, clamping, length limiting, move-toward, and more. Also exposes the `Up`/`Down`/`Left`/`Right` unit vectors.
