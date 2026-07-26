@@ -47,5 +47,25 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// </summary>
         public static bool HasRangedWeapon(IPlayer player) => player.CurrentPrimaryWeapon.WeaponItem != WeaponItem.NONE ||
           player.CurrentSecondaryWeapon.WeaponItem != WeaponItem.NONE;
+
+        /// <summary>
+        /// Gets the current sound effect that should be run for a projectile hit effect given the hit effect type.
+        /// </summary>
+        public static string GetHitEffectProjSoundEffect(IPlayer player) => GetHitEffectProjSoundEffect(player.GetHitEffect());
+
+        /// <summary>
+        /// Gets the current particle effect name to be used for a given hit effect.
+        /// </summary>
+        public static string GetHitEffectName(IPlayer player) => GetHitEffectName(player.GetHitEffect());
+
+        /// <summary>
+        /// Gets the current sound effect that should be run for a projectile hit effect given the hit effect type.
+        /// </summary>
+        public static string GetHitEffectProjSoundEffect(PlayerHitEffect hitEffect) => hitEffect == PlayerHitEffect.Default ? "BulletHitFlesh" : "BulletHitMetal";
+
+        /// <summary>
+        /// Gets the current particle effect name to be used for a given hit effect.
+        /// </summary>
+        public static string GetHitEffectName(PlayerHitEffect hitEffect) => hitEffect == PlayerHitEffect.Default ? EffectName.Blood : EffectName.BulletHitMetal;
     }
 }
