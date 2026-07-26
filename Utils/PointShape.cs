@@ -110,26 +110,38 @@ public partial class GameScript : GameScriptInterfaceExtended
         }
 
         /// <summary>
-        /// Creates a wave of points between two points.
+        /// Creates a sinusoidal wave of points between two points, with the
+        /// displacement applied perpendicular to the line from <paramref name="start"/>
+        /// to <paramref name="end"/>.
         /// </summary>
         /// <param name="func">The action to perform on each point.</param>
         /// <param name="start">The starting point of the wave.</param>
         /// <param name="end">The ending point of the wave.</param>
-        /// <param name="amplitude">The amplitude of the wave.</param>
-        /// <param name="frequency">The frequency of the wave.</param>
+        /// <param name="amplitude">The peak displacement of the wave, in world units, measured perpendicular to the beam.</param>
+        /// <param name="frequency">The number of full sine cycles spanning the beam. A value of 1 produces a single arch from start to end.</param>
         /// <param name="pointDistance">The distance between each point on the wave.</param>
         public static void Wave(Action<Vector2> func, Vector2 start, Vector2 end,
             float amplitude = 1, float frequency = 1, float pointDistance = 0.1f)
         {
             float totalDistance = Vector2.Distance(start, end);
+
+            if (totalDistance < float.Epsilon)
+                return;
+
             int count = (int)Math.Ceiling(totalDistance / pointDistance);
-            float adjustedFrequency = frequency * (totalDistance / count);
+
+            if (count < 2)
+                count = 2;
+
+            Vector2 normal = Vector2Helper.Orthogonal(Vector2.Normalize(end - start));
 
             for (int i = 0; i < count; i++)
             {
-                Vector2 pos = Vector2.Lerp(start, end, (float)i / (count - 1));
-                float offsetY = amplitude * ((float)Math.Sin(adjustedFrequency * pos.X));
-                func(pos + new Vector2(0, offsetY));
+                float alpha = (float)i / (count - 1);
+                Vector2 pos = Vector2.Lerp(start, end, alpha);
+                float offset = amplitude * MathF.Sin(alpha * frequency * 2f * MathF.PI);
+
+                func(pos + normal * offset);
             }
         }
 
