@@ -51,25 +51,32 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             IOrderedEnumerable<Command> commands = ActiveCommands
             .OrderBy(cmd => cmd.ModeratorOnly)
+            .ThenBy(cmd => cmd.HostOnly)
             .ThenBy(cmd => cmd.Name);
 
             foreach (Command command in commands)
             {
                 if (command.ModeratorOnly && !user.IsModerator) continue;
+                if (command.HostOnly && !user.IsHost) continue;
 
                 string displayTxt = $"/{command.Name} ";
 
                 if (command.Description != null)
                     displayTxt += command.Description;
 
-                Game.ShowChatMessage(displayTxt, command.ModeratorOnly ? Color.Yellow : Color.Green, args.User.UserIdentifier);
+                Color color = command.HostOnly ? Color.Magenta
+                    : command.ModeratorOnly ? Color.Yellow
+                    : Color.Green;
+
+                Game.ShowChatMessage(displayTxt, color, args.User.UserIdentifier);
             }
         }
 
         /// <summary>
         /// Invoked for every user message. When the message is a command, locates the
         /// matching <see cref="Command"/> in <see cref="ActiveCommands"/>, enforces its
-        /// <see cref="Command.ModeratorOnly"/> permission, and fires its callback.
+        /// <see cref="Command.ModeratorOnly"/> and <see cref="Command.HostOnly"/>
+        /// permissions, and fires its callback.
         /// </summary>
         private static void OnUserMessage(UserMessageCallbackArgs args)
         {
@@ -82,7 +89,8 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             IUser user = args.User;
 
-            if (!user.IsModerator && commandActivated.ModeratorOnly)
+            if ((!user.IsModerator && commandActivated.ModeratorOnly)
+                || (!user.IsHost && commandActivated.HostOnly))
             {
                 Game.ShowChatMessage("You don't have permission to use this command.",
                 Color.Red, user.UserIdentifier);
@@ -112,6 +120,11 @@ public partial class GameScript : GameScriptInterfaceExtended
             /// Whether the command requires a moderator to execute it. By default false.
             /// </summary>
             public bool ModeratorOnly = false;
+
+            /// <summary>
+            /// Whether the command requires the host to execute it. By default false.
+            /// </summary>
+            public bool HostOnly = false;
 
             /// <summary>
             /// The human-readable description to show when the user requests command help.

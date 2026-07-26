@@ -1,11 +1,11 @@
 # [CommandHandler](CommandHandler.cs)
 
-A registry and dispatcher for chat commands. Register `Command` instances in `ActiveCommands`, call `Initialize` once, and the handler routes incoming user messages to the matching command's callback. Commands are matched case-insensitively, and `ModeratorOnly` commands are gated behind a permission check. Provides a `DisplayHelp` helper that lists all commands a user is allowed to run.
+A registry and dispatcher for chat commands. Register `Command` instances in `ActiveCommands`, call `Initialize` once, and the handler routes incoming user messages to the matching command's callback. Commands are matched case-insensitively, and `ModeratorOnly`/`HostOnly` commands are gated behind a permission check. Provides a `DisplayHelp` helper that lists all commands a user is allowed to run.
 
 Example usage:
 
 ```cs
-public void OnStartup()
+public static void OnStartup()
 {
     // Initialize
     CommandHandler.Initialize();
@@ -21,13 +21,19 @@ public void OnStartup()
         ModeratorOnly = true
     });
 
+    // Host command
+    CommandHandler.ActiveCommands.Add(new("HOST", Test) {
+        Description = "- This is a host only command!",
+        HostOnly = true
+    });
+
     // Automatic help command
     CommandHandler.ActiveCommands.Add(new("T_HELP", CommandHandler.DisplayHelp) {
         Description = "- Displays command help."
     });
 }
 
-private void Test(UserMessageCallbackArgs args) => Game.WriteToConsoleF("Hello World!");
+private static void Test(UserMessageCallbackArgs args) => Game.WriteToConsoleF("Hello World!");
 ```
 
 # [CreateInstance](CreateInstance.cs)
