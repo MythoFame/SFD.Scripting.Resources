@@ -38,7 +38,7 @@ private static void Test(UserMessageCallbackArgs args) => Game.WriteToConsoleF("
 
 # [CommandWrapper](CommandWrapper.cs)
 
-A strongly-typed wrapper around `Game.RunCommand` for common console commands — cheats, map rotation, player management, and more. Most commands only work when the script is loaded as a script extension and are silently ignored when run as a map script.
+A strongly-typed wrapper around `Game.RunCommand` for common chat commands — cheats, map rotation, player management, and more. Most commands only work when the script is loaded as a script extension and are silently ignored when run as a map script.
 
 # [CreateInstance](CreateInstance.cs)
 
