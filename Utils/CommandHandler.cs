@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using SFDGameScriptInterface;
 
 namespace SFD.Scripting.Resources;
@@ -6,39 +7,21 @@ public partial class GameScript : GameScriptInterfaceExtended
 {
     /// <summary>
     /// Tracks registered chat commands and dispatches incoming user messages to
-    /// their associated callbacks. Call <see cref="Initialize"/> once to subscribe
-    /// to user message events; <see cref="Command"/> instances can be added to
-    /// <see cref="ActiveCommands"/> before or after initialization.
+    /// their associated callbacks. The handler auto-subscribes to user message
+    /// events the moment a command is added to <see cref="ActiveCommands"/>, and
+    /// auto-unsubscribes once the list is emptied — no manual Initialize/Destroy
+    /// calls required.
     /// </summary>
     public static class CommandHandler
     {
-        private static bool _initialized = false;
+        private static Events.UserMessageCallback _callback = null;
 
         /// <summary>
-        /// All commands currently registered with the handler. Add a <see cref="Command"/>
-        /// to this list to make it eligible for activation by users in chat.
+        /// All commands currently registered with the handler. Fully public and
+        /// mutable (Add, Remove, Clear, indexer, foreach, LINQ, etc. all work as
+        /// normal) — the collection itself manages the subscription lifecycle.
         /// </summary>
-        public static readonly List<Command> ActiveCommands = [];
-
-        /// <summary>
-        /// Subscribes the handler to user message events. Calling this more than once is a no-op
-        /// and logs a warning to the console.
-        /// </summary>
-        public static void Initialize()
-        {
-            if (_initialized)
-            {
-                Game.WriteToConsoleF("CommandHandler is already initialized.");
-
-                return;
-            }
-
-            Game.Events.StartUserMessageCallback(OnUserMessage);
-
-            _initialized = true;
-
-            Game.WriteToConsoleF("CommandHandler initialized.");
-        }
+        public static readonly CommandCollection ActiveCommands = [];
 
         /// <summary>
         /// Create a command instance using this function as a parameter for an automatic help command.
@@ -50,9 +33,9 @@ public partial class GameScript : GameScriptInterfaceExtended
             Game.ShowChatMessage("Available commands:", Color.Green, user.UserIdentifier);
 
             IOrderedEnumerable<Command> commands = ActiveCommands
-            .OrderBy(cmd => cmd.ModeratorOnly)
-            .ThenBy(cmd => cmd.HostOnly)
-            .ThenBy(cmd => cmd.Name);
+                .OrderBy(cmd => cmd.ModeratorOnly)
+                .ThenBy(cmd => cmd.HostOnly)
+                .ThenBy(cmd => cmd.Name);
 
             foreach (Command command in commands)
             {
@@ -83,7 +66,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             if (!args.IsCommand) return;
 
             Command commandActivated = ActiveCommands
-              .FirstOrDefault(c => c.Name == args.Command);
+                .FirstOrDefault(c => c.Name == args.Command);
 
             if (commandActivated == null) return;
 
@@ -93,7 +76,7 @@ public partial class GameScript : GameScriptInterfaceExtended
                 || (!user.IsHost && commandActivated.HostOnly))
             {
                 Game.ShowChatMessage("You don't have permission to use this command.",
-                Color.Red, user.UserIdentifier);
+                    Color.Red, user.UserIdentifier);
 
                 return;
             }
@@ -101,10 +84,61 @@ public partial class GameScript : GameScriptInterfaceExtended
             commandActivated.OnCommand.Invoke(args);
         }
 
+        private static void Subscribe()
+        {
+            if (_callback != null) return;
+
+            _callback = Game.Events.StartUserMessageCallback(OnUserMessage);
+            Game.WriteToConsoleF("CommandHandler initialized.");
+        }
+
+        private static void Unsubscribe()
+        {
+            if (_callback == null) return;
+
+            if (!Game.Events.Stop(_callback))
+                Game.WriteToConsoleF("Could not stop UserMessageCallback.");
+
+            _callback = null;
+            Game.WriteToConsoleF("CommandHandler destroyed.");
+        }
+
+        /// <summary>
+        /// A <see cref="Collection{T}"/> of <see cref="Command"/> that transparently
+        /// subscribes/unsubscribes the handler's user-message callback as commands are
+        /// added and removed, while remaining fully public and behaving like a normal list.
+        /// </summary>
+        public sealed class CommandCollection : Collection<Command>
+        {
+            protected override void InsertItem(int index, Command item)
+            {
+                base.InsertItem(index, item);
+                Subscribe();
+            }
+
+            protected override void RemoveItem(int index)
+            {
+                base.RemoveItem(index);
+                if (Count == 0) Unsubscribe();
+            }
+
+            protected override void ClearItems()
+            {
+                base.ClearItems();
+                Unsubscribe();
+            }
+
+            protected override void SetItem(int index, Command item)
+            {
+                base.SetItem(index, item);
+                Subscribe();
+            }
+        }
+
         /// <summary>
         /// Represents a single chat command that the <see cref="CommandHandler"/> can dispatch.
         /// </summary>
-        public class Command
+        public sealed class Command
         {
             private string _name = string.Empty;
 

@@ -1,15 +1,12 @@
 # [CommandHandler](CommandHandler.cs)
 
-A registry and dispatcher for chat commands. Register `Command` instances in `ActiveCommands`, call `Initialize` once, and the handler routes incoming user messages to the matching command's callback. Commands are matched case-insensitively, and `ModeratorOnly`/`HostOnly` commands are gated behind a permission check. Provides a `DisplayHelp` helper that lists all commands a user is allowed to run.
+A registry and dispatcher for chat commands. Add `Command` instances to `ActiveCommands` and the handler automatically subscribes to user message events. The subscription is torn down when the last command is removed. Commands are matched case-insensitively, and `ModeratorOnly`/`HostOnly` commands are gated behind a permission check. Provides a `DisplayHelp` helper that lists all commands a user is allowed to run.
 
 Example usage:
 
 ```cs
 public static void OnStartup()
 {
-    // Initialize
-    CommandHandler.Initialize();
-
     // Normal command
     CommandHandler.ActiveCommands.Add(new("TEST", Test) {
         Description = "- This is a test command!"
