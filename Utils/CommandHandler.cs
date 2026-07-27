@@ -56,7 +56,11 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// </summary>
         private static void Destroy()
         {
-            _callback = Game.Events.Stop(_callback);
+            if (!Game.Events.Stop(_callback))
+                Game.WriteToConsoleF("Could not stop UserMessageCallback.");
+                
+            _callback = null;
+
             Game.WriteToConsoleF("CommandHandler destroyed.");
         }
 
