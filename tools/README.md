@@ -37,6 +37,8 @@ Welds together the `GameScript` partial-class bodies from a set of `*.cs` source
 
 For each input file, everything outside of the `GameScript` class (using directives, namespace declaration, and the class declaration itself) is stripped away; only what's declared *inside* the class body survives.
 
+Since the welded output cannot contain `using` directives, the script checks each file that has a `GameScript` class for them and exits with an error listing any found. The only allowed using is `SFDGameScriptInterface`, which is already implicit in the output.
+
 The remaining bodies are concatenated (each preceded by a comment noting its source file) and whitespace-normalized via Roslyn's Formatter before being written to disk.
 
 ```sh

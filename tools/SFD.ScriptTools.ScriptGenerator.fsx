@@ -69,6 +69,54 @@ let outputPath =
         printUsage ()
         exit 1
 
+// Using-directive validation: the welded script can't contain using
+// directives (except SFDGameScriptInterface which is already implicit).
+
+let collectForbiddenUsings (filePath: string) : (string * string) list =
+    if not (File.Exists filePath) then
+        []
+    else
+        let tree = CSharpSyntaxTree.ParseText(File.ReadAllText filePath)
+        let root = tree.GetRoot()
+
+        // Only check usings in files that contribute to the welded output.
+        let hasGameScript =
+            root.DescendantNodes()
+            |> Seq.exists (fun n ->
+                match n with
+                | :? ClassDeclarationSyntax as c when c.Identifier.ValueText = GameScriptClassName -> true
+                | _ -> false)
+
+        if not hasGameScript then [] else
+
+        root.DescendantNodes()
+        |> Seq.choose (fun n ->
+            match n with
+            | :? UsingDirectiveSyntax as u ->
+                let name = u.Name.ToFullString().Trim()
+                let label = u.ToString().TrimEnd(';', '\n', '\r').Trim()
+                let isGlobal = u.GlobalKeyword.IsKind(SyntaxKind.GlobalKeyword)
+                let isStatic = u.StaticKeyword.IsKind(SyntaxKind.StaticKeyword)
+                let hasAlias = not (isNull u.Alias)
+                let isAllowed = not isGlobal && not isStatic && not hasAlias && name = "SFDGameScriptInterface"
+
+                if isAllowed then None else Some(label, filePath)
+            | _ -> None)
+        |> Seq.toList
+
+let forbiddenUsings = parsed.Files |> List.collect collectForbiddenUsings
+
+if not forbiddenUsings.IsEmpty then
+    eprintfn "The following 'using' directives are not allowed in welded scripts;"
+    eprintfn "replace them with fully-qualified references (e.g. System.Collections.Generic.Dictionary)."
+
+    for label, file in forbiddenUsings do
+        eprintfn "  %s: %s;" (Path.GetFileName file) label
+
+    eprintfn ""
+    eprintfn "'using SFDGameScriptInterface;' is the only allowed using (implicit in the welded output)."
+    exit 1
+
 // Formatting helper: dedent by one indentation level. After formatting a
 // member block that Roslyn believes lives one level inside a class, every
 // line carries that class's indentation. Since the final welded output is
