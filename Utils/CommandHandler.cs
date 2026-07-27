@@ -12,32 +12,52 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// </summary>
     public static class CommandHandler
     {
-        private static bool _initialized = false;
+        private static Events.UserMessageCallback _callback = false;
 
         /// <summary>
         /// All commands currently registered with the handler. Add a <see cref="Command"/>
         /// to this list to make it eligible for activation by users in chat.
         /// </summary>
-        public static readonly List<Command> ActiveCommands = [];
+        private static readonly List<Command> _activeCommands = [];
+
+        /// <summary>
+        /// Add a new command and inits callback if required.
+        /// </summary>
+        public static void Add(Command command)
+        {
+            if (_callback == null)
+                Initialize();
+
+            _activeCommands.Add(command);
+        }
+
+        /// <summary>
+        /// Remove a command and destroys callback if possible.
+        /// </summary>
+        /// <param name="command"></param>
+        public static void Remove(Command command)
+        {
+            if (_activeCommands.Remove(command) && _activeCommands.Length == 0)
+                Destroy();
+        }
 
         /// <summary>
         /// Subscribes the handler to user message events. Calling this more than once is a no-op
         /// and logs a warning to the console.
         /// </summary>
-        public static void Initialize()
+        private static void Initialize()
         {
-            if (_initialized)
-            {
-                Game.WriteToConsoleF("CommandHandler is already initialized.");
-
-                return;
-            }
-
-            Game.Events.StartUserMessageCallback(OnUserMessage);
-
-            _initialized = true;
-
+            _callback = Game.Events.StartUserMessageCallback(OnUserMessage);
             Game.WriteToConsoleF("CommandHandler initialized.");
+        }
+
+        /// <summary>
+        /// Unsubscribe the handler to user message events if there's no active commands.
+        /// </summary>
+        private static void Destroy()
+        {
+            _callback = Game.Events.Stop(_callback);
+            Game.WriteToConsoleF("CommandHandler destroyed.");
         }
 
         /// <summary>
@@ -104,7 +124,7 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <summary>
         /// Represents a single chat command that the <see cref="CommandHandler"/> can dispatch.
         /// </summary>
-        public class Command
+        public sealed class Command
         {
             private string _name = string.Empty;
 

@@ -11,24 +11,24 @@ public static void OnStartup()
     CommandHandler.Initialize();
 
     // Normal command
-    CommandHandler.ActiveCommands.Add(new("TEST", Test) {
+    CommandHandler.Add(new Command("TEST", Test) {
         Description = "- This is a test command!"
     });
 
     // Moderator command
-    CommandHandler.ActiveCommands.Add(new("MOD", Test) {
+    CommandHandler.Add(new Command("MOD", Test) {
         Description = "- This is a moderator only command!",
         ModeratorOnly = true
     });
 
     // Host command
-    CommandHandler.ActiveCommands.Add(new("HOST", Test) {
+    CommandHandler.Add(new Command("HOST", Test) {
         Description = "- This is a host only command!",
         HostOnly = true
     });
 
     // Automatic help command
-    CommandHandler.ActiveCommands.Add(new("T_HELP", CommandHandler.DisplayHelp) {
+    CommandHandler.Add(new Command("T_HELP", CommandHandler.DisplayHelp) {
         Description = "- Displays command help."
     });
 }
