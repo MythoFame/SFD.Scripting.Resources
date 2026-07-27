@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using SFDGameScriptInterface;
 
 namespace SFD.Scripting.Resources;
@@ -108,7 +107,7 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// subscribes/unsubscribes the handler's user-message callback as commands are
         /// added and removed, while remaining fully public and behaving like a normal list.
         /// </summary>
-        public sealed class CommandCollection : Collection<Command>
+        public sealed class CommandCollection : System.Collections.ObjectModel.Collection<Command>
         {
             protected override void InsertItem(int index, Command item)
             {
