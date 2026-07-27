@@ -12,7 +12,7 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// </summary>
     public static class CommandHandler
     {
-        private static Events.UserMessageCallback _callback = false;
+        private static Events.UserMessageCallback _callback = null;
 
         /// <summary>
         /// All commands currently registered with the handler. Add a <see cref="Command"/>
