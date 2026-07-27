@@ -36,6 +36,10 @@ public static void OnStartup()
 private static void Test(UserMessageCallbackArgs args) => Game.WriteToConsoleF("Hello World!");
 ```
 
+# [CommandWrapper](CommandWrapper.cs)
+
+A strongly-typed wrapper around `Game.RunCommand` for common console commands — cheats, map rotation, player management, and more. Most commands only work when the script is loaded as a script extension and are silently ignored when run as a map script.
+
 # [CreateInstance](CreateInstance.cs)
 
 A generic factory helper that instantiates a `Type` by reflecting over its public constructor and casting the result to `T`. Throws `InvalidOperationException` when no matching constructor exists.

@@ -17,6 +17,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 **Available utilities:**
 
 - `CommandHandler`
+- `CommandWrapper`
 - `CreateInstance`
 - `CustomProjectile`
 - `GetRandomWeaponFromType`
