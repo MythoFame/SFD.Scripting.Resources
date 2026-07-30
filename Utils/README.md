@@ -57,6 +57,10 @@ Extends `CustomProjectile` with self-steering behavior. Each update it rotates i
 
 Generic utilities for `IPlayer`, such as unsticking players from geometry and querying firing state.
 
+# [ProjectileHelper](ProjectileHelper.cs)
+
+General-purpose utilities for `IProjectile`.
+
 # [PointShape](PointShape.cs)
 
 Static helpers that generate collections of `Vector2` points along common shapes — trails, circles, squares/polygons, swirls and waves — plus a random-in-area generator. Each method invokes a callback for every produced point, so they can be used to drive effects, spawns, or any point-wise operation. Includes a `DegreesToRadians` conversion helper.

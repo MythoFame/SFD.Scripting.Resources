@@ -23,6 +23,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `GetRandomWeaponFromType`
 - `HomingProjectile`
 - `PlayerHelper`
+- `ProjectileHelper`
 - `PointShape`
 - `ShowChatMessages`
 - `Vector2Helper`
