@@ -16,8 +16,6 @@ public partial class GameScript : GameScriptInterfaceExtended
         private Vector2 _position;
         private Vector2 _subPosition;
 
-        private RayCastInput _rayCastCollision;
-
         private Events.UpdateCallback _updateCallback = null;
 
         private float _distanceTravelled = 0;
@@ -52,15 +50,7 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <summary>
         /// Information about the collision to be used for ray casting.
         /// </summary>
-        public RayCastInput RayCastCollision
-        {
-            get => _rayCastCollision;
-            set
-            {
-                _rayCastCollision = value;
-                _rayCastCollision.ClosestHitOnly = true;
-            }
-        }
+        public RayCastInput RayCastCollision;
 
         /// <summary>
         /// Current position of the projectile.
@@ -201,34 +191,43 @@ public partial class GameScript : GameScriptInterfaceExtended
             if (Vector2.Distance(_subPosition, Position) < MIN_RAYCAST_LENGTH)
                 rayCastEnd = _subPosition + Direction * MIN_RAYCAST_LENGTH;
 
-            RayCastResult checkedResult = Game.RayCast(_subPosition, rayCastEnd, RayCastCollision)[0];
+            RayCastResult[] results = Game.RayCast(_subPosition, rayCastEnd, RayCastCollision);
 
-            bool landed = false;
+            Vector2 trailEnd = Position;
+            bool disabled = false;
 
-            if (checkedResult.Hit)
+            foreach (RayCastResult result in results)
             {
-                if (checkedResult.IsPlayer)
-                {
-                    IPlayer hitPlayer = (IPlayer)checkedResult.HitObject;
+                if (!result.Hit) continue;
 
-                    landed = OnPlayerHit?.Invoke(hitPlayer, checkedResult.Position, this) ?? true;
+                bool landed;
+
+                if (result.IsPlayer)
+                {
+                    IPlayer hitPlayer = (IPlayer)result.HitObject;
+                    landed = OnPlayerHit?.Invoke(hitPlayer, result.Position, this) ?? true;
                 }
                 else
                 {
-                    landed = OnObjectHit?.Invoke(checkedResult.HitObject, checkedResult.Position, this) ?? true;
+                    landed = OnObjectHit?.Invoke(result.HitObject, result.Position, this) ?? true;
                 }
 
                 if (landed && PiercingTargets > 0)
                     PiercingTargets--;
 
-                bool blockedByObject = !checkedResult.IsPlayer && !checkedResult.HitObject.Destructable && !Wallbang;
+                bool blockedByObject = !result.IsPlayer && !result.HitObject.Destructable && !Wallbang;
 
-                Enabled = PiercingTargets > 0 && !blockedByObject;
+                if (PiercingTargets == 0 || blockedByObject)
+                {
+                    trailEnd = result.Position;
+                    disabled = true;
+                    break;
+                }
             }
 
-            Game.PlayEffect(Effect, _subPosition);
+            if (disabled) Enabled = false;
 
-            Vector2 trailEnd = checkedResult.Hit && landed && !Enabled ? checkedResult.Position : Position;
+            Game.PlayEffect(Effect, _subPosition);
 
             PointShape.Trail(Draw, _subPosition, trailEnd, 5);
 
