@@ -31,10 +31,11 @@ let defaultSearchPaths: string list =
 // Argument parsing
 
 let printUsage () =
-    printfn "Usage: SFD.ScriptTools.LibrarySetup.fsx [-f|--file <path>] [-o|--output <path>] [--dry-run] [-h|--help]"
+    printfn "Usage: SFD.ScriptTools.LibrarySetup.fsx [-f|--file <path>] [-o|--output <path>] [-F|--force] [--dry-run] [-h|--help]"
     printfn ""
     printfn "  -f, --file    Explicit path to %s (skips auto-search)" DllName
     printfn "  -o, --output  Output path for the symlink/copy (default: %s)" defaultOutputPath
+    printfn "  -F, --force   On version mismatch, update <RequiredGameSdkVersion> to the installed DLL version"
     printfn "      --dry-run Run checks without touching the filesystem; exit 1 if action is needed"
     printfn "  -h, --help    Show this help message and exit"
 
@@ -44,7 +45,8 @@ type ParsedArgs =
     { File: string option
       Output: string option
       Help: bool
-      DryRun: bool }
+      DryRun: bool
+      Force: bool }
 
 let rec parseArgs (args: string list) (acc: ParsedArgs) =
     match args with
@@ -52,6 +54,7 @@ let rec parseArgs (args: string list) (acc: ParsedArgs) =
     | ("-f" | "--file") :: value :: rest -> parseArgs rest { acc with File = Some value }
     | ("-o" | "--output") :: value :: rest -> parseArgs rest { acc with Output = Some value }
     | "--dry-run" :: rest -> parseArgs rest { acc with DryRun = true }
+    | ("-F" | "--force") :: rest -> parseArgs rest { acc with Force = true }
     | ("-h" | "--help") :: rest -> parseArgs rest { acc with Help = true }
     | unknown :: rest ->
         eprintfn "Warning: Unknown argument '%s' (ignored)." unknown
@@ -63,13 +66,15 @@ let parsed =
         { File = None
           Output = None
           Help = false
-          DryRun = false }
+          DryRun = false
+          Force = false }
 
 if parsed.Help then
     printUsage ()
     exit 0
 
 let dryRun = parsed.DryRun
+let force = parsed.Force
 let explicitFile = parsed.File
 let outputPath = defaultArg parsed.Output defaultOutputPath
 
@@ -254,8 +259,22 @@ match assemblyVersion with
             eprintfn "Version mismatch!"
             eprintfn "  Project requires:  %s" fieldText
             eprintfn "  Installed DLL:     %s" v
-            eprintfn "Install the required SFD SDK version or update '%s' manually." csprojName
-            exit 1
+
+            if force && not dryRun then
+                let replacement = sprintf "<RequiredGameSdkVersion>%s</RequiredGameSdkVersion>" v
+                let newCsprojText = fieldRegex.Replace(csprojText, replacement, 1)
+                File.WriteAllText(csprojPath, newCsprojText)
+                printfn "Updated <RequiredGameSdkVersion> from '%s' to '%s' in '%s'." fieldText v csprojName
+                printfn "Done."
+                exit 0
+            elif force && dryRun then
+                eprintfn "[dry-run] Would update <RequiredGameSdkVersion> from '%s' to '%s'." fieldText v
+                eprintfn "Cannot continue without writing changes; exiting with status 1."
+                exit 1
+            else
+                eprintfn "Install the required SFD SDK version or update '%s' manually." csprojName
+                eprintfn "Pass --force to update the project to the installed version automatically."
+                exit 1
     | _ ->
         printfn "No <RequiredGameSdkVersion> field found in '%s'." csprojName
 
