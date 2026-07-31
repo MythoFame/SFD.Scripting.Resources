@@ -42,23 +42,19 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// The nearest living player considered a valid homing target. A player is
         /// eligible when it is not on the projectile's team (or is independent) and
         /// is not the <see cref="Shooter"/>. Returns null when no such player exists.
+        /// Override to customize target selection (e.g. target allies, specific teams,
+        /// lowest-health player, etc.).
         /// </summary>
-        protected IPlayer ClosestEnemy
+        protected virtual IPlayer ClosestTarget
         {
             get
             {
-                List<IPlayer> enemies =
-                [.. Game.GetPlayers()
-                        .Where(p => (p.GetTeam() != Team ||
-                            p.GetTeam() == PlayerTeam.Independent) &&
-                          !p.IsDead && p != Shooter)];
-
-                enemies.Sort((p1, p2) =>
-                  Vector2.Distance(p1.GetWorldPosition(), Position)
-                  .CompareTo(Vector2.Distance(p2.GetWorldPosition(),
-                    Position)));
-
-                return enemies.FirstOrDefault();
+                return Game.GetPlayers()
+                    .Where(p => !p.IsDead
+                                && p != Shooter
+                                && (p.GetTeam() != Team ||
+                                    p.GetTeam() == PlayerTeam.Independent))
+                    .MinBy(p => Vector2.Distance(p.GetWorldPosition(), Position));
             }
         }
 
@@ -99,12 +95,12 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <returns>The position to home towards, or null if there is no valid target.</returns>
         protected virtual Vector2? GetHomingTargetPosition()
         {
-            IPlayer closestEnemy = ClosestEnemy;
+            IPlayer closestTarget = ClosestTarget;
 
-            if (closestEnemy == null)
+            if (closestTarget == null)
                 return null;
 
-            return closestEnemy.GetAABB().Center;
+            return closestTarget.GetAABB().Center;
         }
 
         /// <summary>
