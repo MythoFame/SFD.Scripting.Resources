@@ -45,6 +45,20 @@ A generic factory helper that instantiates a `Type` by reflecting over its publi
 
 A fully customizable projectile that travels in a straight line, performs its own ray-cast collision each update, and fires `OnPlayerHit`/`OnObjectHit` callbacks on impact. Supports piercing (multiple hits before disabling), wallbanging through indestructible geometry, a maximum travel distance, a trailing effect, and a copy constructor for easy templating.
 
+# [EffectNamesExtra](EffectNamesExtra.cs)
+
+Undocumented `Game.PlayEffect` effect names exposed as constant strings, following the same pattern as `EffectName`. Each entry documents the expected argument signature for the extra parameters after position.
+
+| Constant | Value | Args | Description |
+|---|---|---|---|
+| `MuzzleFlash` | `"MZLED"` | `(int tileUniqueId, string muzzleFlashType)` | Muzzle flash on a tile |
+| `OutOfAmmoRecoil` | `"OOAC"` | `(int playerId)` | Out-of-ammo recoil animation |
+| `PickupText` | `"PWT"` | `(string weaponId)` | Weapon pickup text (plain or with `_ammo` suffix) |
+| `FireNodeFlamethrower` | `"FNFTST"` | `(float x, float y)` | FireNode flamethrower origin |
+| `FireListener` | `"FLST"` | `(int objectId)` | Fire listener (purpose unconfirmed) |
+| `FireNodeSpawner` | `"FND"` | — | FireNode spawn animation |
+| `FireBig` | `"FBG"` | `(int playerId)` | Fire big (purpose unconfirmed) |
+
 # [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
 
 Returns a random `WeaponItem` whose `WeaponItemType` matches the given category. Internally draws random weapons via `Game.GetRandomWeaponItem` and spawns them transiently to inspect their type, retrying until a match is found.

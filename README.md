@@ -20,6 +20,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `CommandWrapper`
 - `CreateInstance`
 - `CustomProjectile`
+- `EffectNamesExtra`
 - `GetRandomWeaponFromType`
 - `HomingProjectile`
 - `NodeProjectile`
