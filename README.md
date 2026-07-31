@@ -29,7 +29,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `ShowChatMessages`
 - `Vector2Helper`
 
-See [`Utils/README.md`](Utils/README.md) for detailed documentation on each utility.
+See [`SFD.Scripting.Resources/Utils/README.md`](SFD.Scripting.Resources/Utils/README.md) for detailed documentation on each utility.
 
 ## 📢 Events
 
@@ -40,4 +40,4 @@ Custom callbacks that wrap the existing SFD script API events, providing higher-
 - `GameOverCallback`
 - `PlayerKillCallback`
 
-See [`Events/README.md`](Events/README.md) for detailed documentation on each event.
+See [`SFD.Scripting.Resources/Events/README.md`](SFD.Scripting.Resources/Events/README.md) for detailed documentation on each event.
