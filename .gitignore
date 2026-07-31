@@ -22,4 +22,4 @@ bld/
 .idea/
 
 # SFD
-SFD.Scripting.Resources/lib/SFD.GameScriptInterface.dll
+lib/SFD.GameScriptInterface.dll
