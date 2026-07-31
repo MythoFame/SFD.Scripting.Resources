@@ -53,6 +53,13 @@ Returns a random `WeaponItem` whose `WeaponItemType` matches the given category.
 
 Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Shooter` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
 
+# [NodeProjectile](NodeProjectile.cs)
+
+Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity pull, horizontal friction, and a configurable lifetime. Collision detection uses a vertical raycast segment centered on the projectile. With `Lingering` enabled the projectile can settle on non-destructible surfaces and keep sensing nearby targets each frame like a proximity mine until `Lifetime` expires.
+
+> [!NOTE]  
+> Note that non-destructible objects still "land" by default (decrementing `PiercingTargets`), so to make `Lingering` effective either raise `PiercingTargets` or return `false` from `OnObjectHit` for non-destructible objects.
+
 # [PlayerHelper](PlayerHelper.cs)
 
 Generic utilities for `IPlayer`, such as unsticking players from geometry and querying firing state.
