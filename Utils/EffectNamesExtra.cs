@@ -12,20 +12,26 @@ public partial class GameScript : GameScriptInterfaceExtended
     {
         /// <summary>
         /// Muzzle flash effect on a tile.
-        /// <code>Game.PlayEffect("MZLED", Vector2.Zero, tileUniqueId, muzzleFlashType)</code>
+        /// <code>Game.PlayEffect("MZLED", Vector2.Zero, objectId, muzzleFlashType)</code>
         /// </summary>
         /// <remarks>
-        /// <b>param1</b> (<see cref="int"/>) — UniqueID of the tile holding the muzzle;
-        /// the tile's angle is used to rotate the muzzle flash.<br/>
-        /// <b>param2</b> (<see cref="string"/>) — Muzzle flash type. Accepted values:
-        /// • MuzzleFlashS
-        /// • MuzzleFlashM
-        /// • MuzzleFlashL
-        /// • MuzzleFlashBazooka
-        /// • MuzzleFlashAssaultRifle
-        /// • MuzzleFlashShotgun
+        /// <b>param1</b> (<see cref="int"/>) — Object ID (any object: tile, player, etc.).<br/>
+        /// <b>param2</b> (<see cref="string"/>) — Muzzle flash type. Accepted values from <see cref="MuzzleFlashTypes"/>.
         /// </remarks>
         public const string MuzzleFlash = "MZLED";
+
+        /// <summary>
+        /// Muzzle-flash type identifiers used with <see cref="MuzzleFlash"/>.
+        /// </summary>
+        public static class MuzzleFlashTypes
+        {
+            public const string S = "MuzzleFlashS";
+            public const string M = "MuzzleFlashM";
+            public const string L = "MuzzleFlashL";
+            public const string Bazooka = "MuzzleFlashBazooka";
+            public const string AssaultRifle = "MuzzleFlashAssaultRifle";
+            public const string Shotgun = "MuzzleFlashShotgun";
+        }
 
         /// <summary>
         /// Shows the ranged-weapon out-of-ammo recoil animation on a player.
@@ -50,14 +56,14 @@ public partial class GameScript : GameScriptInterfaceExtended
         public const string PickupText = "PWT";
 
         /// <summary>
-        /// Spawns a FireNode flamethrower effect at the given world coordinates.
-        /// <code>Game.PlayEffect("FNFTST", Vector2.Zero, x, y)</code>
+        /// Starts a FireNode flamethrower effect. Direction is passed via args; the effect origin is the <code>worldPosition</code> given to <see cref="IGame.PlayEffect"/>.
+        /// <code>Game.PlayEffect("FNFTST", Vector2.Zero, dirX, dirY)</code>
         /// </summary>
         /// <remarks>
-        /// <b>param1</b> (<see cref="float"/>) — X coordinate of the effect origin.<br/>
-        /// <b>param2</b> (<see cref="float"/>) — Y coordinate of the effect origin.
+        /// <b>param1</b> (<see cref="float"/>) — Direction X component (<c>dirX</c>).<br/>
+        /// <b>param2</b> (<see cref="float"/>) — Direction Y component (<c>dirY</c>).
         /// </remarks>
-        public const string FireNodeFlamethrower = "FNFTST";
+        public const string FireNodeFlamethrowerStart = "FNFTST";
 
         /// <summary>
         /// Fire listener effect on an object. (Purpose unconfirmed.)
@@ -68,21 +74,18 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// </remarks>
         public const string FireListener = "FLST";
 
+        // Non-functional through PlayEffect — kept for reference.
         /// <summary>
-        /// Fire node spawner effect. Animates the appearance of a FireNode at
-        /// the given position.
+        /// Fire node effect (internal name "FireNode"). Non-functional via <see cref="IGame.PlayEffect"/>.
         /// <code>Game.PlayEffect("FND", position)</code>
         /// </summary>
-        public const string FireNodeSpawner = "FND";
+        // public const string FireNode = "FND";
 
+        // Non-functional through PlayEffect — kept for reference.
         /// <summary>
-        /// Fire big effect on a player. (Purpose unconfirmed.)
-        /// <code>Game.PlayEffect("FBG", Vector2.Zero, playerId)</code>
+        /// Fire big effect (internal name "FireBig"). Non-functional via <see cref="IGame.PlayEffect"/>.
+        /// <code>Game.PlayEffect("FBG", Vector2.Zero, objectId)</code>
         /// </summary>
-        /// <remarks>
-        /// <b>param1</b> (<see cref="int"/>) — <see cref="IPlayer.UniqueID"/> of the player
-        /// to apply the effect to.
-        /// </remarks>
-        public const string FireBig = "FBG";
+        // public const string FireBig = "FBG";
     }
 }

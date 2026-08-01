@@ -55,13 +55,11 @@ Undocumented `Game.PlayEffect` effect names exposed as constant strings, followi
 
 | Constant | Value | Args | Description |
 |---|---|---|---|
-| `MuzzleFlash` | `"MZLED"` | `(int tileUniqueId, string muzzleFlashType)` | Muzzle flash on a tile |
+| `MuzzleFlash` | `"MZLED"` | `(int objectId, string muzzleFlashType)` | Muzzle flash on any object; types in `MuzzleFlashTypes` |
 | `OutOfAmmoRecoil` | `"OOAC"` | `(int playerId)` | Out-of-ammo recoil animation |
 | `PickupText` | `"PWT"` | `(string weaponId)` | Weapon pickup text (plain or with `_ammo` suffix) |
-| `FireNodeFlamethrower` | `"FNFTST"` | `(float x, float y)` | FireNode flamethrower origin |
+| `FireNodeFlamethrowerStart` | `"FNFTST"` | `(float dirX, float dirY)` | FireNode flamethrower start (direction; origin = `PlayEffect` position) |
 | `FireListener` | `"FLST"` | `(int objectId)` | Fire listener (purpose unconfirmed) |
-| `FireNodeSpawner` | `"FND"` | — | FireNode spawn animation |
-| `FireBig` | `"FBG"` | `(int playerId)` | Fire big (purpose unconfirmed) |
 
 # [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
 
