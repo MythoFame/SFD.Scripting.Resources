@@ -6,6 +6,8 @@ public partial class GameScript : GameScriptInterfaceExtended
 {
     /// <summary>
     /// Represents a custom projectile with customizable behavior and collision handling.
+    /// Subclass it to change how the projectile reacts to non-destructable surfaces
+    /// (see <see cref="OnNonDestructableHit"/>).
     /// </summary>
     public class CustomProjectile
     {
@@ -235,5 +237,13 @@ public partial class GameScript : GameScriptInterfaceExtended
         }
 
         private void Draw(Vector2 pos) => Game.PlayEffect(Effect, pos);
+
+        /// <summary>
+        /// Called when the projectile hits a non-destructable object and <see cref="Wallbang"/>
+        /// is disabled. Return <c>true</c> to stop the projectile at the hit point (the default),
+        /// or <c>false</c> to keep it flying.
+        /// </summary>
+        /// <param name="result">The ray-cast hit against the non-destructable object.</param>
+        protected virtual bool OnNonDestructableHit(RayCastResult result) => true;
     }
 }

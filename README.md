@@ -16,6 +16,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 
 **Available utilities:**
 
+- `BouncingProjectile`
 - `CommandHandler`
 - `CommandWrapper`
 - `CreateInstance`

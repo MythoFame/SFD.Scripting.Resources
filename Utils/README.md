@@ -1,3 +1,7 @@
+# [BouncingProjectile](BouncingProjectile.cs)
+
+Extends `CustomProjectile` with bouncing behavior on non-destructable surfaces. When the projectile hits a wall or other non-destructable object, it reflects its direction across the hit normal instead of being disabled, consuming one of `Bounces` (defaults to 2). Once `Bounces` reaches 0 the projectile reverts to the default behavior and is disabled on wall contact. Setting `Wallbang` to `true` still causes the projectile to pass through walls without bouncing.
+
 # [CommandHandler](CommandHandler.cs)
 
 A registry and dispatcher for chat commands. Add `Command` instances to `ActiveCommands` and the handler automatically subscribes to user message events. The subscription is torn down when the last command is removed. Commands are matched case-insensitively, and `ModeratorOnly`/`HostOnly` commands are gated behind a permission check. Provides a `DisplayHelp` helper that lists all commands a user is allowed to run.
