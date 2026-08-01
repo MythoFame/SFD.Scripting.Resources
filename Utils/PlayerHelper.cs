@@ -42,6 +42,11 @@ public partial class GameScript : GameScriptInterfaceExtended
         public static bool IsFiring(IPlayer player) => player.IsHipFiring || IsManualFiring(player);
 
         /// <summary>
+        /// Determines whether the player is dodging and can be hit by projectiles.
+        /// </summary>
+        public static bool IsDodging(IPlayer player) => player.IsRolling || player.IsDiving;
+
+        /// <summary>
         /// Gets whether a player currently has a ranged weapon, whether it be the
         /// primary or secondary weapon slot.
         /// </summary>
