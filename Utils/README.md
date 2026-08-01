@@ -47,7 +47,7 @@ A generic factory helper that instantiates a `Type` by reflecting over its publi
 
 # [CustomProjectile](CustomProjectile.cs)
 
-A fully customizable projectile that travels in a straight line, performs its own ray-cast collision each update, and fires `OnPlayerHit`/`OnObjectHit` callbacks on impact. Supports piercing (multiple hits before disabling), wallbanging through indestructible geometry, a maximum travel distance, a trailing effect, and a copy constructor for easy templating.
+A fully customizable projectile that travels in a straight line, performs its own ray-cast collision each update, and fires a single `OnHit` callback on impact (use `RayCastResult.IsPlayer` to distinguish between players and objects). Supports piercing (multiple hits before disabling), wallbanging through indestructible geometry, a maximum travel distance, a trailing effect, and a copy constructor for easy templating.
 
 # [EffectNamesExtra](EffectNamesExtra.cs)
 
@@ -76,7 +76,7 @@ Extends `CustomProjectile` with self-steering behavior. Each update it rotates i
 Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity pull, horizontal friction, and a configurable lifetime. Collision detection uses a vertical raycast segment centered on the projectile. With `Lingering` enabled the projectile can settle on non-destructible surfaces and keep sensing nearby targets each frame like a proximity mine until `Lifetime` expires.
 
 > [!NOTE]  
-> Note that non-destructible objects still "land" by default (decrementing `PiercingTargets`), so to make `Lingering` effective either raise `PiercingTargets` or return `false` from `OnObjectHit` for non-destructible objects.
+> Note that non-destructible objects still "land" by default (decrementing `PiercingTargets`), so to make `Lingering` effective either raise `PiercingTargets` or return `false` from `OnHit` for non-destructible objects.
 
 # [PlayerHelper](PlayerHelper.cs)
 

@@ -126,22 +126,13 @@ public partial class GameScript : GameScriptInterfaceExtended
         }
 
         /// <summary>
-        /// Delegate for handling when the projectile hits a player.
+        /// Delegate for handling when the projectile hits anything (a player or an object).
         /// </summary>
-        /// <param name="hitPlayer">The player hit by the projectile.</param>
-        /// <param name="hitPosition">The position at which the projectile hit.</param>
+        /// <param name="result">The ray-cast hit. Check <see cref="RayCastResult.IsPlayer"/> to distinguish players (cast <c>result.HitObject</c> to <see cref="IPlayer"/>) from objects.</param>
+        /// <param name="proj">The projectile that landed the hit.</param>
         /// <returns>Whether the shot landed. A landed hit decreases the remaining piercing targets.</returns>
-        public delegate bool OnPlayerHitCallback(IPlayer hitPlayer, Vector2 hitPosition, CustomProjectile proj);
-        public OnPlayerHitCallback OnPlayerHit;
-
-        /// <summary>
-        /// Delegate for handling when the projectile hits an object.
-        /// </summary>
-        /// <param name="hitObject">The object hit by the projectile.</param>
-        /// <param name="hitPosition">The position at which the projectile hit.</param>
-        /// <returns>Whether the shot landed. A landed hit decreases the remaining piercing targets.</returns>
-        public delegate bool OnObjectHitCallback(IObject hitObject, Vector2 hitPosition, CustomProjectile proj);
-        public OnObjectHitCallback OnObjectHit;
+        public delegate bool OnHitCallback(RayCastResult result, CustomProjectile proj);
+        public OnHitCallback OnHit;
 
         /// <summary>
         /// Initializes a new instance of the CustomProjectile class.
@@ -173,8 +164,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             Effect = proj.Effect;
             Wallbang = proj.Wallbang;
             RayCastCollision = proj.RayCastCollision;
-            OnPlayerHit = proj.OnPlayerHit;
-            OnObjectHit = proj.OnObjectHit;
+            OnHit = proj.OnHit;
             Enabled = true;
         }
 
@@ -202,24 +192,19 @@ public partial class GameScript : GameScriptInterfaceExtended
             {
                 if (!result.Hit) continue;
 
-                bool landed;
-
-                if (result.IsPlayer)
-                {
-                    IPlayer hitPlayer = (IPlayer)result.HitObject;
-                    landed = OnPlayerHit?.Invoke(hitPlayer, result.Position, this) ?? true;
-                }
-                else
-                {
-                    landed = OnObjectHit?.Invoke(result.HitObject, result.Position, this) ?? true;
-                }
+                bool landed = OnHit?.Invoke(result, this) ?? true;
 
                 if (landed && PiercingTargets > 0)
                     PiercingTargets--;
 
-                bool blockedByObject = !result.IsPlayer && !result.HitObject.Destructable && !Wallbang;
+                if (PiercingTargets == 0)
+                {
+                    trailEnd = result.Position;
+                    disabled = true;
+                    break;
+                }
 
-                if (PiercingTargets == 0 || blockedByObject)
+                if (!result.IsPlayer && !result.HitObject.Destructable && !Wallbang && OnNonDestructableHit(result))
                 {
                     trailEnd = result.Position;
                     disabled = true;

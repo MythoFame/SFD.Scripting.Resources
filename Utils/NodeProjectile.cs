@@ -18,7 +18,7 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// so with the default <c>PiercingTargets = 1</c> the projectile will disable on the
     /// first wall hit instead of lingering. To make <see cref="Lingering"/> effective,
     /// either raise <see cref="CustomProjectile.PiercingTargets"/> or return
-    /// <c>false</c> from <see cref="CustomProjectile.OnObjectHit"/> for non-destructible
+    /// <c>false</c> from <see cref="CustomProjectile.OnHit"/> for non-destructible
     /// objects (check <c>!hitObject.Destructable</c>).
     /// </remarks>
     public class NodeProjectile : CustomProjectile
@@ -162,18 +162,8 @@ public partial class GameScript : GameScriptInterfaceExtended
                 {
                     if (!result.Hit) continue;
 
-                    bool landed;
                     bool destructable = result.IsPlayer || result.HitObject.Destructable;
-
-                    if (result.IsPlayer)
-                    {
-                        IPlayer hitPlayer = (IPlayer)result.HitObject;
-                        landed = OnPlayerHit?.Invoke(hitPlayer, result.Position, this) ?? true;
-                    }
-                    else
-                    {
-                        landed = OnObjectHit?.Invoke(result.HitObject, result.Position, this) ?? true;
-                    }
+                    bool landed = OnHit?.Invoke(result, this) ?? true;
 
                     if (landed && PiercingTargets > 0)
                         PiercingTargets--;
