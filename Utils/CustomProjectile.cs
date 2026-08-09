@@ -197,19 +197,20 @@ public partial class GameScript : GameScriptInterfaceExtended
                 if (landed && PiercingTargets > 0)
                     PiercingTargets--;
 
-                if (PiercingTargets == 0)
+                bool stop = PiercingTargets == 0
+                    || (!result.IsPlayer && !result.HitObject.Destructable && !Wallbang && OnNonDestructableHit(result));
+
+                if (stop)
                 {
                     trailEnd = result.Position;
                     disabled = true;
                     break;
                 }
 
-                if (!result.IsPlayer && !result.HitObject.Destructable && !Wallbang && OnNonDestructableHit(result))
-                {
-                    trailEnd = result.Position;
-                    disabled = true;
-                    break;
-                }
+                // The hit kept the projectile flying (e.g. a bounce); its position and
+                // direction changed, so remaining results cast against the old segment are stale.
+                trailEnd = result.Position;
+                break;
             }
 
             if (disabled) Enabled = false;
