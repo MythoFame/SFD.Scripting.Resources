@@ -1,6 +1,6 @@
 # [BouncingProjectile](BouncingProjectile.cs)
 
-Extends `CustomProjectile` with bouncing behavior on non-destructable surfaces. When the projectile hits a wall or other non-destructable object, it reflects its direction across the hit normal instead of being disabled, consuming one of `Bounces` (defaults to 2). Once `Bounces` reaches 0 the projectile reverts to the default behavior and is disabled on wall contact. Setting `Wallbang` to `true` still causes the projectile to pass through walls without bouncing.
+Extends `CustomProjectile` with bouncing behavior on non-destructable surfaces. When the projectile hits a wall or other non-destructable object, it reflects its direction across the hit normal instead of being disabled, consuming one of `Bounces` (defaults to 2). Once `Bounces` reaches 0 the projectile reverts to the default behavior and is disabled on wall contact. Setting `Wallbang` to `true` still causes the projectile to pass through walls without bouncing. The `OnBounce` callback fires on every bounce with the ray-cast hit and the projectile itself.
 
 # [CommandHandler](CommandHandler.cs)
 
