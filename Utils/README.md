@@ -67,7 +67,7 @@ Returns a random `WeaponItem` whose `WeaponItemType` matches the given category.
 
 # [HomingProjectile](HomingProjectile.cs)
 
-Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Shooter` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
+Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Owner` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
 
 # [NodeProjectile](NodeProjectile.cs)
 

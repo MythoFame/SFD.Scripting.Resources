@@ -55,6 +55,12 @@ public partial class GameScript : GameScriptInterfaceExtended
         public RayCastInput RayCastCollision;
 
         /// <summary>
+        /// The projectile's owner, if any. Not used by the base class; provided for
+        /// external logic and used by subclasses (e.g. <see cref="HomingProjectile"/>).
+        /// </summary>
+        public IPlayer Owner = null;
+
+        /// <summary>
         /// Current position of the projectile.
         /// </summary>
         public Vector2 Position
@@ -164,6 +170,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             Effect = proj.Effect;
             Wallbang = proj.Wallbang;
             RayCastCollision = proj.RayCastCollision;
+            Owner = proj.Owner;
             OnHit = proj.OnHit;
             Enabled = true;
         }
