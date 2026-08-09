@@ -71,7 +71,7 @@ Extends `CustomProjectile` with self-steering behavior. Each update it rotates i
 
 # [NodeProjectile](NodeProjectile.cs)
 
-Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity pull, horizontal friction, and a configurable lifetime. Collision detection uses a vertical raycast segment centered on the projectile. With `Lingering` enabled the projectile can settle on non-destructible surfaces and keep sensing nearby targets each frame like a proximity mine until `Lifetime` expires.
+Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity pull, horizontal friction, and a configurable lifetime. While airborne it casts swept raycasts along its traveled path (like the base class), so it can hit players reliably in flight. Once it settles on a surface, collision detection switches to a vertical raycast segment centered on the projectile. With `Lingering` enabled the projectile settles on non-destructible surfaces instead of being disabled, and keeps sensing nearby targets every 50ms like a proximity mine until `Lifetime` expires.
 
 > [!NOTE]  
 > Note that non-destructible objects still "land" by default (decrementing `PiercingTargets`), so to make `Lingering` effective either raise `PiercingTargets` or return `false` from `OnHit` for non-destructible objects.
