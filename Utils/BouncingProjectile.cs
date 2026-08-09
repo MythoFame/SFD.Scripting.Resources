@@ -17,6 +17,14 @@ public partial class GameScript : GameScriptInterfaceExtended
         public int Bounces = 2;
 
         /// <summary>
+        /// Delegate for handling when the projectile bounces off a non-destructable surface.
+        /// </summary>
+        /// <param name="result">The ray-cast hit against the non-destructable surface.</param>
+        /// <param name="proj">The projectile that bounced.</param>
+        public delegate void OnBounceCallback(RayCastResult result, BouncingProjectile proj);
+        public OnBounceCallback OnBounce;
+
+        /// <summary>
         /// Creates a new bouncing projectile with the specified position, direction and
         /// ray-cast collision settings. <see cref="CustomProjectile.Speed"/> defaults to 1.
         /// </summary>
@@ -62,6 +70,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             Bounces--;
             Position = result.Position;
             Direction = Vector2Helper.Bounce(Direction, result.Normal);
+            OnBounce?.Invoke(result, this);
             return false;
         }
     }
