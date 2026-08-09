@@ -219,7 +219,7 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             PointShape.Trail(Draw, _subPosition, trailEnd, 5);
 
-            _subPosition += vel;
+            _subPosition = _position;
         }
 
         private void Draw(Vector2 pos) => Game.PlayEffect(Effect, pos);
