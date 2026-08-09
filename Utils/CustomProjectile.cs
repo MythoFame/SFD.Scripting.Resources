@@ -12,11 +12,11 @@ public partial class GameScript : GameScriptInterfaceExtended
     public class CustomProjectile
     {
         private const uint COOLDOWN = 0;
-        private const float MIN_RAYCAST_LENGTH = 4;
+        protected const float MIN_RAYCAST_LENGTH = 4;
 
         private Vector2 _direction;
-        private Vector2 _position;
-        private Vector2 _subPosition;
+        protected Vector2 _position;
+        protected Vector2 _subPosition;
 
         private Events.UpdateCallback _updateCallback = null;
 
