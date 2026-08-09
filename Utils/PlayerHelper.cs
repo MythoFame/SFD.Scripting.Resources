@@ -72,5 +72,37 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// Gets the current particle effect name to be used for a given hit effect.
         /// </summary>
         public static string GetHitEffectName(PlayerHitEffect hitEffect) => hitEffect == PlayerHitEffect.Default ? EffectName.Blood : EffectName.BulletHitMetal;
+
+        /// <summary>
+        /// Issues a command to a player immediately. If the player's input is currently
+        /// enabled, it is disabled for the command and re-enabled one update later.
+        /// </summary>
+        /// <param name="player">The player to issue the command to.</param>
+        /// <param name="command">The command to execute.</param>
+        public static void QuickCommand(IPlayer player, PlayerCommand command)
+        {
+            bool inputEnabled = player.IsInputEnabled;
+
+            player.AddCommand(command);
+
+            if (inputEnabled)
+            {
+                player.SetInputEnabled(false);
+
+                Game.Events.StartUpdateCallback(dlt =>
+                {
+                    player?.SetInputEnabled(true);
+                }, 1, 1);
+            }
+        }
+
+        /// <summary>
+        /// Issues a command of the given type to a player immediately. If the player's
+        /// input is currently enabled, it is disabled for the command and re-enabled one
+        /// update later.
+        /// </summary>
+        /// <param name="player">The player to issue the command to.</param>
+        /// <param name="commandType">The type of command to execute.</param>
+        public static void QuickCommand(IPlayer player, PlayerCommandType commandType) => QuickCommand(player, new PlayerCommand(commandType));
     }
 }
