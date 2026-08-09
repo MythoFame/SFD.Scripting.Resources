@@ -7,10 +7,10 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// <summary>
     /// A <see cref="CustomProjectile"/> that mimics the physics of SFD's FireNodes:
     /// travels forward, is pulled down by gravity, decelerates via friction, and
-    /// can settle on the ground when it hits a non-destructible surface. Detection
-    /// uses a vertical raycast segment centered on the projectile's position, so a
-    /// <see cref="RayCastCollision"/> with <c>ClosestHitOnly = false</c> is
-    /// recommended for reliable multi-hit sensing.
+    /// can settle on the ground when it hits a non-destructible surface. While
+    /// airborne it casts swept ray-casts along its traveled path (like the base
+    /// class), so it can hit players reliably in flight; once settled it senses
+    /// targets with a vertical raycast segment, see <see cref="Lingering"/>.
     /// </summary>
     /// <remarks>
     /// Non-destructible objects are treated as the resting surface rather than valid
@@ -56,8 +56,9 @@ public partial class GameScript : GameScriptInterfaceExtended
         public bool Lingering = false;
 
         /// <summary>
-        /// Length of the vertical raycast segment used for collision detection,
-        /// centered on <see cref="CustomProjectile.Position"/>. Defaults to 16.
+        /// Length of the vertical raycast segment used for collision detection once
+        /// the projectile is static, centered on <see cref="CustomProjectile.Position"/>.
+        /// Defaults to 16.
         /// </summary>
         public float RayCastLength = 16;
 
@@ -116,6 +117,8 @@ public partial class GameScript : GameScriptInterfaceExtended
                 return;
             }
 
+            Vector2 half = Vector2.UnitY * (RayCastLength / 2);
+
             if (!_isStatic)
             {
                 Vector2 vel = Velocity;
@@ -132,31 +135,16 @@ public partial class GameScript : GameScriptInterfaceExtended
                 if (vel != Vector2.Zero)
                     Velocity = vel;
 
-                Position += vel * dlt;
-            }
+                _position += vel * dlt;
 
-            bool doRaycast = !_isStatic;
+                Game.DrawLine(_subPosition, Position, Color.Yellow);
 
-            if (_isStatic)
-            {
-                _raycastCooldown += dlt;
-                if (_raycastCooldown >= RAYCAST_COOLDOWN_MS)
-                {
-                    doRaycast = true;
-                    _raycastCooldown = 0;
-                }
-            }
+                Vector2 rayCastEnd = _position;
 
-            if (doRaycast)
-            {
-                Vector2 half = Vector2.UnitY * (RayCastLength / 2);
+                if (Vector2.Distance(_subPosition, _position) < MIN_RAYCAST_LENGTH)
+                    rayCastEnd = _subPosition + Direction * MIN_RAYCAST_LENGTH;
 
-                Vector2 bottom = Position - half;
-                Vector2 top = Position + half;
-
-                Game.DrawLine(bottom, top);
-
-                RayCastResult[] results = Game.RayCast(bottom, top, RayCastCollision);
+                RayCastResult[] results = Game.RayCast(_subPosition, rayCastEnd, RayCastCollision);
 
                 foreach (RayCastResult result in results)
                 {
@@ -176,14 +164,12 @@ public partial class GameScript : GameScriptInterfaceExtended
 
                     if (!destructable)
                     {
-                        if (Wallbang || _isStatic)
+                        if (Wallbang)
                             continue;
 
                         if (Lingering)
                         {
-                            Position = result.Position.Y > Position.Y
-                                ? result.Position - half
-                                : result.Position + half;
+                            Position = result.Position;
                             Velocity = Vector2.Zero;
                             _isStatic = true;
                             continue;
@@ -191,6 +177,43 @@ public partial class GameScript : GameScriptInterfaceExtended
 
                         Enabled = false;
                         break;
+                    }
+                }
+
+                _subPosition = _position;
+            }
+            else
+            {
+                _raycastCooldown += dlt;
+                if (_raycastCooldown >= RAYCAST_COOLDOWN_MS)
+                {
+                    _raycastCooldown = 0;
+
+                    Vector2 bottom = Position - half;
+                    Vector2 top = Position + half;
+
+                    Game.DrawLine(bottom, top);
+
+                    RayCastResult[] results = Game.RayCast(bottom, top, RayCastCollision);
+
+                    foreach (RayCastResult result in results)
+                    {
+                        if (!result.Hit) continue;
+
+                        bool destructable = result.IsPlayer || result.HitObject.Destructable;
+                        bool landed = OnHit?.Invoke(result, this) ?? true;
+
+                        if (landed && PiercingTargets > 0)
+                            PiercingTargets--;
+
+                        if (PiercingTargets == 0)
+                        {
+                            Enabled = false;
+                            break;
+                        }
+
+                        if (!destructable)
+                            continue;
                     }
                 }
             }
