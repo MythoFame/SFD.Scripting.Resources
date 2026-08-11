@@ -26,7 +26,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (string.IsNullOrEmpty(input))
-                return Enumerable.Empty<IUser>();
+                return [];
 
             IUser[] users = Game.GetActiveUsers();
 
@@ -44,12 +44,12 @@ public partial class GameScript : GameScriptInterfaceExtended
                 return byName;
 
             if (self != null && string.Equals(input, "me", comparison))
-                return new[] { self };
+                return [self];
 
             if (string.Equals(input, "*", comparison))
                 return users;
 
-            return Enumerable.Empty<IUser>();
+            return [];
         }
 
         /// <summary>
@@ -67,12 +67,12 @@ public partial class GameScript : GameScriptInterfaceExtended
             StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (string.IsNullOrEmpty(input))
-                return Enumerable.Empty<IPlayer>();
+                return [];
 
             if (int.TryParse(input, out int uniqueId))
             {
                 IPlayer player = Game.GetPlayer(uniqueId);
-                return player != null ? new[] { player } : Enumerable.Empty<IPlayer>();
+                return player != null ? [player] : [];
             }
 
             if (!string.Equals(input, "*", comparison))
@@ -92,7 +92,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             if (string.Equals(input, "*", comparison))
                 return Game.GetPlayers();
 
-            return Enumerable.Empty<IPlayer>();
+            return [];
         }
     }
 }
