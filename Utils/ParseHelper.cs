@@ -53,12 +53,12 @@ public partial class GameScript : GameScriptInterfaceExtended
         }
 
         /// <summary>
-        /// Resolves a string against the players in the game. A numeric input matches
-        /// <see cref="IGame.GetPlayer(int)"/> by unique ID. Otherwise it delegates to
-        /// <see cref="ParseUsers"/> (matching real players by account/name first, including
-        /// the <c>"me"</c> shortcut), then falls back to matching <see cref="IObject.Name"/>
-        /// across <see cref="IGame.GetPlayers()"/> to also catch externally spawned bots.
-        /// The literal <c>"*"</c> resolves to all players.
+        /// Resolves a string against the players in the game. A numeric input indexes the
+        /// array returned by <see cref="IGame.GetPlayers()"/> (which mostly matches game
+        /// slots). Otherwise it delegates to <see cref="ParseUsers"/> (matching real players
+        /// by account/name first, including the <c>"me"</c> shortcut), then falls back to
+        /// matching <see cref="IObject.Name"/> across <see cref="IGame.GetPlayers()"/> to
+        /// also catch externally spawned bots. The literal <c>"*"</c> resolves to all players.
         /// </summary>
         /// <param name="input">The player identifier to resolve.</param>
         /// <param name="self">The invoking user, forwarded to <see cref="ParseUsers"/> for the <c>"me"</c> shortcut.</param>
@@ -69,11 +69,10 @@ public partial class GameScript : GameScriptInterfaceExtended
             if (string.IsNullOrEmpty(input))
                 return [];
 
-            if (int.TryParse(input, out int uniqueId))
-            {
-                IPlayer player = Game.GetPlayer(uniqueId);
-                return player != null ? [player] : [];
-            }
+            IPlayer[] players = Game.GetPlayers();
+
+            if (int.TryParse(input, out int index))
+                return index >= 0 && index < players.Length ? [players[index]] : [];
 
             if (!string.Equals(input, "*", comparison))
             {
@@ -83,14 +82,14 @@ public partial class GameScript : GameScriptInterfaceExtended
                     return users.Select(u => u.GetPlayer()).Where(p => p != null);
             }
 
-            IEnumerable<IPlayer> byName = Game.GetPlayers()
+            IEnumerable<IPlayer> byName = players
                 .Where(p => string.Equals(p.Name, input, comparison));
 
             if (byName.Any())
                 return byName;
 
             if (string.Equals(input, "*", comparison))
-                return Game.GetPlayers();
+                return players;
 
             return [];
         }
