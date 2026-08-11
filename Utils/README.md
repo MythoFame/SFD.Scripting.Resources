@@ -80,6 +80,10 @@ Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity p
 > [!NOTE]  
 > Note that non-destructible objects still "land" by default (decrementing `PiercingTargets`), so to make `Lingering` effective either raise `PiercingTargets` or return `false` from `OnHit` for non-destructible objects.
 
+# [ParseHelper](ParseHelper.cs)
+
+Reusable string parsers for common SFD types, aimed at chat commands. `ParseUsers` resolves a string against active users — by `GameSlotIndex` for numeric input, or by `AccountName`/`Name`, with `"me"` (the invoking user) and `"*"` (all users) shortcuts. `ParsePlayers` does the same for players, matching real players first via the user parser and falling back to `IObject.Name` to also catch externally spawned bots, with `"*"` resolving to all players. All methods take a `StringComparison` (default case-insensitive) and return an empty collection when nothing matches.
+
 # [PlayerHelper](PlayerHelper.cs)
 
 Generic utilities for `IPlayer`, such as unsticking players from geometry and querying firing state.
