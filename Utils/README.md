@@ -41,6 +41,10 @@ private static void Test(UserMessageCallbackArgs args) => Game.WriteToConsoleF("
 
 A strongly-typed wrapper around `Game.RunCommand` for common chat commands — cheats, map rotation, player management, and more. Most commands only work when the script is loaded as a script extension and are silently ignored when run as a map script.
 
+# [Companions](Companions.cs)
+
+Helpers for managing bot companions on the main team, used in official-campaign-style map scripts where missing players are replaced by bots. `Initialize` scopes companion damage and starts a periodic update that syncs incoming damage with the game difficulty and keeps companions guarding a living player; `GetCompanions` and `SetBotName` expose team lookup and renaming. The `CompanionsFollow`/`CompanionsFight`/`GoToSaferoom` methods take `TriggerArgs` and are meant to be invoked directly from map triggers to retask the companions.
+
 # [CreateInstance](CreateInstance.cs)
 
 A generic factory helper that instantiates a `Type` by reflecting over its public constructor and casting the result to `T`. Throws `InvalidOperationException` when no matching constructor exists.
