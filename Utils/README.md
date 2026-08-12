@@ -98,6 +98,10 @@ Static helpers that generate collections of `Vector2` points along common shapes
 
 <img alt="PointShape" src="../.github/assets/Shape.gif" />
 
+# [RandomHelper](RandomHelper.cs)
+
+Helpers for generating random values. `GetRandomColor(Random)` returns a `Color` with fully random RGB values and opaque alpha.
+
 # [ShowChatMessages](ShowChatMessages.cs)
 
 Batch wrapper around `Game.ShowChatMessage` that accepts an `IEnumerable<string>` of messages and displays each one as its own line in the chat. Mirrors the four overloads of the underlying API: bare, colored, user-targeted, and colored-user-targeted.
