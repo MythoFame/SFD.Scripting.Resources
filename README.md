@@ -30,6 +30,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `PlayerHelper`
 - `ProjectileHelper`
 - `PointShape`
+- `RandomHelper`
 - `ShowChatMessages`
 - `Vector2Helper`
 
