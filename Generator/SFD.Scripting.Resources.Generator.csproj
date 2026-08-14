@@ -6,4 +6,8 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <Target Name="GenerateSourceDb">
+        <Exec Command="dotnet &quot;$(TargetPath)&quot; --sfd-game-dir &quot;$(SfdGameDir)&quot; --assets-subdir &quot;$(SfdAssetsSubDir)&quot; --repo-dir &quot;$(SfdRepoDir)&quot;" />
+    </Target>
 </Project>

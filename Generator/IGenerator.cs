@@ -1,4 +1,4 @@
-namespace Generator;
+namespace SFD.Scripting.Resources.Generator;
 
 public interface IGenerator
 {
@@ -6,5 +6,5 @@ public interface IGenerator
     public string[] DirectoriesWhitelist { get; }
     public string[] IgnoredFiles { get; }
 
-    public void Generate(string root);
+    public void Generate(string dataRoot, string outputDir);
 }

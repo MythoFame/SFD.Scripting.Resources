@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Generator;
+namespace SFD.Scripting.Resources.Generator;
 
 public sealed class CodeWriter : StreamWriter
 {
