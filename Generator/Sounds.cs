@@ -1,5 +1,6 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace SFD.Scripting.Resources.Generator;
 
@@ -11,7 +12,12 @@ public sealed class Sounds : IGenerator
 
     public void Generate(string dataRoot, string outputDir)
     {
-        string[] directories = [.. DirectoriesWhitelist.Select(d => Path.Combine(dataRoot, d))];
+        string dbPath = Path.Combine(dataRoot, DirectoriesWhitelist[0], "Sounds.sfds");
+        if (!File.Exists(dbPath))
+        {
+            Console.Error.WriteLine($"Sounds database not found: '{dbPath}'");
+            return;
+        }
 
         string output = Path.Combine(outputDir, GeneratedSource);
         using CodeWriter writer = new(output);
@@ -33,13 +39,29 @@ public sealed class Sounds : IGenerator
                              """);
         writer.IncrementPadding();
 
-        foreach (string file in Directory.GetFiles(directories, "*.wav", SearchOption.AllDirectories))
+        string[] lines = File.ReadAllLines(dbPath);
+
+        HashSet<string> ignored = [.. IgnoredFiles];
+        HashSet<string> seen = [];
+
+        foreach (string line in lines)
         {
-            string fileName = Path.GetFileNameWithoutExtension(file);
+            string trimmed = line.Trim();
+            if (trimmed.Length == 0 || trimmed[0] == '/') continue;
 
-            if (Enumerable.Contains(IgnoredFiles, fileName)) continue;
+            int space = trimmed.IndexOf(' ');
+            string name = space < 0 ? trimmed : trimmed[..space];
 
-            writer.WriteLine($"public const string {fileName.Replace("_", string.Empty)} = \"{fileName}\";");
+            if (name.Length == 0 || ignored.Contains(name)) continue;
+
+            string identifier = name.Replace("_", string.Empty);
+            if (!seen.Add(identifier))
+            {
+                Console.Error.WriteLine($"Duplicate sound '{name}' skipped.");
+                continue;
+            }
+
+            writer.WriteLine($"public const string {identifier} = \"{name}\";");
         }
 
         writer.DecrementPadding();
