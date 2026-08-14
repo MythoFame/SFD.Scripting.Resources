@@ -32,6 +32,8 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `PointShape`
 - `RandomHelper`
 - `ShowChatMessages`
+- `SoundsDatabase`
+- `TilesDatabase`
 - `Vector2Helper`
 
 See [`Utils/README.md`](Utils/README.md) for detailed documentation on each utility.

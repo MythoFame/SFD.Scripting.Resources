@@ -106,6 +106,14 @@ Helpers for generating random values. `GetRandomColor(Random)` returns a `Color`
 
 Batch wrapper around `Game.ShowChatMessage` that accepts an `IEnumerable<string>` of messages and displays each one as its own line in the chat. Mirrors the four overloads of the underlying API: bare, colored, user-targeted, and colored-user-targeted.
 
+# [SoundsDatabase](Sounds.cs)
+
+Auto-generated database of every in-game sound effect name as constant strings (e.g. `Jump` = `"Jump"`, `MachineGun` = `"MachineGun"`). Each constant's value is the literal sound name passed to the game. Regenerated from the game's sound data by the project generator (see `Generator/README.md`).
+
+# [TilesDatabase](Tiles.cs)
+
+Auto-generated database of every in-game tile and object name as constant strings (e.g. `Tile01` = `"Tile01"`). Each constant's value is the literal tile name passed to the game when creating tiles or objects. Regenerated from the game's tile data by the project generator (see `Generator/README.md`).
+
 # [Vector2Helper](Vector2Helper.cs)
 
 A math utility class for `Vector2` offering operations not built into the SFD API: angles, dot/cross products, reflection and bouncing, projection, rotation, clamping, length limiting, move-toward, and more. Also exposes the `Up`/`Down`/`Left`/`Right` unit vectors.
