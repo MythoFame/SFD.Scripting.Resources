@@ -45,6 +45,10 @@ A strongly-typed wrapper around `Game.RunCommand` for common chat commands — c
 
 Helpers for managing bot companions on the main team, used in official-campaign-style map scripts where missing players are replaced by bots. `Initialize` scopes companion damage and starts a periodic update that syncs incoming damage with the game difficulty and keeps companions guarding a living player; `GetCompanions` and `SetBotName` expose team lookup and renaming. The `CompanionsFollow`/`CompanionsFight`/`GoToSaferoom` methods take `TriggerArgs` and are meant to be invoked directly from map triggers to retask the companions.
 
+# [ColorHelper](ColorHelper.cs)
+
+Helpers for interacting with colors. `GetRandomColor(Random)` returns a `Color` with fully random RGB values and opaque alpha.
+
 # [CreateInstance](CreateInstance.cs)
 
 A generic factory helper that instantiates a `Type` by reflecting over its public constructor and casting the result to `T`. Throws `InvalidOperationException` when no matching constructor exists.
@@ -97,10 +101,6 @@ General-purpose utilities for `IProjectile`.
 Static helpers that generate collections of `Vector2` points along common shapes — trails, circles, squares/polygons, swirls and waves — plus a random-in-area generator. Each method invokes a callback for every produced point, so they can be used to drive effects, spawns, or any point-wise operation. Includes a `DegreesToRadians` conversion helper.
 
 <img alt="PointShape" src="../.github/assets/Shape.gif" />
-
-# [RandomHelper](RandomHelper.cs)
-
-Helpers for generating random values. `GetRandomColor(Random)` returns a `Color` with fully random RGB values and opaque alpha.
 
 # [ShowChatMessages](ShowChatMessages.cs)
 

@@ -17,6 +17,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 **Available utilities:**
 
 - `BouncingProjectile`
+- `ColorHelper`
 - `CommandHandler`
 - `CommandWrapper`
 - `Companions`
@@ -30,7 +31,6 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `PlayerHelper`
 - `ProjectileHelper`
 - `PointShape`
-- `RandomHelper`
 - `ShowChatMessages`
 - `SoundsDatabase`
 - `TilesDatabase`
