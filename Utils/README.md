@@ -47,7 +47,7 @@ Helpers for managing bot companions on the main team, used in official-campaign-
 
 # [ColorHelper](ColorHelper.cs)
 
-Helpers for interacting with colors. `GetRandomColor(Random)` returns a `Color` with fully random RGB values and opaque alpha.
+Helpers for interacting with colors. `GetRandomColor(Random)` returns a `Color` with fully random RGB values and opaque alpha; `GetTeamColor(PlayerTeam)` maps a team to its standard color. `ToHex` formats a color as `#RRGGBB` (optionally `#RRGGBBAA`), while `FromHex` parses both forms back, tolerating an optional leading `#`, case-insensitive digits, and defaulting a missing alpha to opaque.
 
 # [CreateInstance](CreateInstance.cs)
 
