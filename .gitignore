@@ -1,0 +1,25 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio and VSCode directories
+.vs/
+.vscode/
+
+# Rider
+.idea/
+
+# SFD
+lib/SFD.GameScriptInterface.dll

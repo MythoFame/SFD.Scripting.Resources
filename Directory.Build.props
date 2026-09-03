@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <!-- Set this to your local Superfighters Deluxe install, e.g.:
+        <SfdGameDir>C:/Program Files (x86)/Steam/steamapps/common/Superfighters Deluxe</SfdGameDir>
+        -->
+        <SfdAssetsSubDir>Content/Data</SfdAssetsSubDir>
+        <SfdRepoDir>$(MSBuildThisFileDirectory)</SfdRepoDir>
+    </PropertyGroup>
+</Project>
