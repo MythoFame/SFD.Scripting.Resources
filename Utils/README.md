@@ -98,7 +98,7 @@ Helpers for the map's pathfinding grid. `GetRandomPathGridPosition` returns a ra
 
 # [PlayerHelper](PlayerHelper.cs)
 
-Generic utilities for `IPlayer`, such as unsticking players from geometry and querying firing state.
+Generic utilities for `IPlayer`, such as unsticking players from geometry, querying firing state and reviving dead players.
 
 # [ProjectileHelper](ProjectileHelper.cs)
 

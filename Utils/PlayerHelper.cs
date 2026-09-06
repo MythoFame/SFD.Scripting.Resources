@@ -104,5 +104,39 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <param name="player">The player to issue the command to.</param>
         /// <param name="commandType">The type of command to execute.</param>
         public static void QuickCommand(IPlayer player, PlayerCommandType commandType) => QuickCommand(player, new PlayerCommand(commandType));
+
+        /// <summary>
+        /// Revives a dead player by recreating them at their death position with the same
+        /// user (including bot behavior for bots), profile, team and input mode, then
+        /// removes the original player. Does nothing when the player is not dead.
+        /// </summary>
+        /// <param name="player">The dead player to revive.</param>
+        public static void Revive(IPlayer player)
+        {
+            if (!player.IsDead)
+            {
+                return;
+            }
+
+            IPlayer revived = Game.CreatePlayer(player.GetWorldPosition());
+
+            IUser user = player.GetUser();
+
+            if (user != null)
+            {
+                if (user.IsBot)
+                {
+                    revived.SetBotBehavior(new BotBehavior(true, user.BotPredefinedAIType));
+                }
+
+                revived.SetUser(user);
+            }
+
+            revived.SetProfile(player.GetProfile());
+            revived.SetTeam(player.GetTeam());
+            revived.SetInputMode(player.InputMode);
+
+            player.Remove();
+        }
     }
 }
