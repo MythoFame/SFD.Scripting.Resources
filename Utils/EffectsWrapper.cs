@@ -70,13 +70,13 @@ public partial class GameScript : GameScriptInterfaceExtended
 
         /// <summary>
         /// Plays the <see cref="EffectName.CameraShaker"/> effect at the given position.
+        /// The shake is always applied globally.
         /// </summary>
         /// <param name="pos">World position of the effect.</param>
         /// <param name="intensity">Intensity of the camera shake.</param>
         /// <param name="time">Duration of the camera shake.</param>
-        /// <param name="global">Whether the camera shake is applied globally.</param>
-        public static void PlayCameraShaker(Vector2 pos, float intensity, float time, bool global) =>
-            Game.PlayEffect(EffectName.CameraShaker, pos, intensity, time, global);
+        public static void PlayCameraShaker(Vector2 pos, float intensity, float time) =>
+            Game.PlayEffect(EffectName.CameraShaker, pos, intensity, time, true);
 
         /// <summary>
         /// Plays the <see cref="EffectName.Steam"/> effect at the given position.
