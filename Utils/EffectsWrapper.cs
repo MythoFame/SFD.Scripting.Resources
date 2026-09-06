@@ -69,6 +69,14 @@ public partial class GameScript : GameScriptInterfaceExtended
             Game.PlayEffect(EffectName.BulletSlowmoTrace, pos, dirX, dirY);
 
         /// <summary>
+        /// Plays the <see cref="EffectName.BulletSlowmoTrace"/> effect at the given position.
+        /// </summary>
+        /// <param name="pos">World position of the effect.</param>
+        /// <param name="dir">Direction of the trace.</param>
+        public static void PlayBulletSlowmoTrace(Vector2 pos, Vector2 dir) =>
+            Game.PlayEffect(EffectName.BulletSlowmoTrace, pos, dir.X, dir.Y);
+
+        /// <summary>
         /// Plays the <see cref="EffectName.CameraShaker"/> effect at the given position.
         /// The shake is always applied globally.
         /// </summary>
@@ -83,8 +91,25 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// </summary>
         /// <param name="pos">World position of the effect.</param>
         /// <param name="steamColor">Color of the steam.</param>
+        public static void PlaySteam(Vector2 pos, Color steamColor) =>
+            Game.PlayEffect(EffectName.Steam, pos, steamColor);
+
+        /// <summary>
+        /// Plays the <see cref="EffectName.Steam"/> effect at the given position.
+        /// </summary>
+        /// <param name="pos">World position of the effect.</param>
+        /// <param name="steamColor">Color of the steam.</param>
         /// <param name="steamScale">Scale of the steam.</param>
-        /// <param name="fadeSpeed">Fade speed in milliseconds.</param>
+        public static void PlaySteam(Vector2 pos, Color steamColor, float steamScale) =>
+            Game.PlayEffect(EffectName.Steam, pos, steamColor, steamScale);
+
+        /// <summary>
+        /// Plays the <see cref="EffectName.Steam"/> effect at the given position.
+        /// </summary>
+        /// <param name="pos">World position of the effect.</param>
+        /// <param name="steamColor">Color of the steam.</param>
+        /// <param name="steamScale">Scale of the steam.</param>
+        /// <param name="fadeSpeed">Fade speed multiplier.</param>
         public static void PlaySteam(Vector2 pos, Color steamColor, float steamScale, float fadeSpeed) =>
             Game.PlayEffect(EffectName.Steam, pos, steamColor, steamScale, fadeSpeed);
 
@@ -149,6 +174,15 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <param name="dirY">Direction Y component.</param>
         public static void PlayFireNodeFlamethrowerStart(Vector2 pos, float dirX, float dirY) =>
             Game.PlayEffect(EffectNamesExtra.FireNodeFlamethrowerStart, pos, dirX, dirY);
+
+        /// <summary>
+        /// Plays the <see cref="EffectNamesExtra.FireNodeFlamethrowerStart"/> effect,
+        /// starting a FireNode flamethrower effect from the given position.
+        /// </summary>
+        /// <param name="pos">World position of the effect.</param>
+        /// <param name="dir">Direction of the flamethrower.</param>
+        public static void PlayFireNodeFlamethrowerStart(Vector2 pos, Vector2 dir) =>
+            Game.PlayEffect(EffectNamesExtra.FireNodeFlamethrowerStart, pos, dir.X, dir.Y);
 
         /// <summary>
         /// Plays the <see cref="EffectNamesExtra.FireListener"/> effect on an object.

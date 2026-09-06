@@ -71,7 +71,7 @@ Undocumented `Game.PlayEffect` effect names exposed as constant strings, followi
 
 # [EffectsWrapper](EffectsWrapper.cs)
 
-Typed wrappers over `Game.PlayEffect` for effects whose extra `object[]` arguments fail silently when given the wrong type. Covers `CustomFloatText` with incremental overloads (text, color, duration, scale, outline), `BulletSlowmoTrace`, `CameraShaker`, `Steam` and `TraceSpawner` — the latter accepting either an `IObject` or a raw `UniqueID` to track — plus wrappers for the undocumented effects from `EffectNamesExtra` (`MuzzleFlash`, `OutOfAmmoRecoil`, `PickupText`, `FireNodeFlamethrowerStart` and `FireListener`).
+Typed wrappers over `Game.PlayEffect` for effects whose extra `object[]` arguments fail silently when given the wrong type. Provides incremental overloads for `CustomFloatText`, `Steam` and `TraceSpawner` — the latter accepting either an `IObject` or a raw `UniqueID` to track — plus `BulletSlowmoTrace`, `CameraShaker` (always applied globally) and `Vector2` overloads for the direction-based effects. Also wraps the undocumented effects from `EffectNamesExtra` (`MuzzleFlash`, `OutOfAmmoRecoil`, `PickupText`, `FireNodeFlamethrowerStart` and `FireListener`).
 
 # [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
 
