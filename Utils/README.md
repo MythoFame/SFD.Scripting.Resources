@@ -88,6 +88,10 @@ Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity p
 
 Reusable string parsers for common SFD types, aimed at chat commands. `ParseUsers` resolves a string against active users — by `GameSlotIndex` for numeric input, or by `AccountName`/`Name`, with `"me"` (the invoking user) and `"*"` (all users) shortcuts. `ParsePlayers` does the same for players, matching real players first via the user parser and falling back to `IObject.Name` to also catch externally spawned bots, with `"*"` resolving to all players. Each method takes a `ParseFlags` bitmask to select which operations to attempt (default `Everything`), evaluated in a fixed secure order — index, account name, name, then special tokens — so a literal collision like a user named `"me"` is still matched by user data first. Both return an empty collection when nothing matches and use a configurable `StringComparison` (default case-insensitive).
 
+# [PathHelpers](PathHelpers.cs)
+
+Helpers for the map's pathfinding grid. `GetRandomPathGridPosition` returns a random point along a random valid path node connection — enabled `Default` connections between enabled `Ground`/`Platform` nodes — or `Vector2.Zero` when the map contains no valid connections. Useful for spawning objects or effects at plausible walkable positions.
+
 # [PlayerHelper](PlayerHelper.cs)
 
 Generic utilities for `IPlayer`, such as unsticking players from geometry and querying firing state.
