@@ -35,6 +35,23 @@ public partial class GameScript : GameScriptInterfaceExtended
         };
 
         /// <summary>
+        /// Lerps between two <see cref="Color"/> values channel-wise.
+        /// </summary>
+        /// <param name="from">The color at an <paramref name="amount"/> of 0.</param>
+        /// <param name="to">The color at an <paramref name="amount"/> of 1.</param>
+        /// <param name="amount">The lerp amount, clamped between 0 and 1.</param>
+        public static Color Lerp(Color from, Color to, float amount)
+        {
+            amount = MathHelper.Clamp(amount, 0, 1);
+
+            return new Color(
+                (byte)MathHelper.Lerp(from.R, to.R, amount),
+                (byte)MathHelper.Lerp(from.G, to.G, amount),
+                (byte)MathHelper.Lerp(from.B, to.B, amount),
+                (byte)MathHelper.Lerp(from.A, to.A, amount));
+        }
+
+        /// <summary>
         /// Returns the hexadecimal representation of a <see cref="Color"/> in the form
         /// <c>#RRGGBB</c>, optionally followed by the alpha component as <c>#RRGGBBAA</c>.
         /// </summary>
