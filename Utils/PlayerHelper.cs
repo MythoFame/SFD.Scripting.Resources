@@ -111,11 +111,12 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// removes the original player. Does nothing when the player is not dead.
         /// </summary>
         /// <param name="player">The dead player to revive.</param>
-        public static void Revive(IPlayer player)
+        /// <returns>The recreated player, or <c>null</c> when the player is not dead.</returns>
+        public static IPlayer Revive(IPlayer player)
         {
             if (!player.IsDead)
             {
-                return;
+                return null;
             }
 
             IPlayer revived = Game.CreatePlayer(player.GetWorldPosition());
@@ -137,6 +138,8 @@ public partial class GameScript : GameScriptInterfaceExtended
             revived.SetInputMode(player.InputMode);
 
             player.Remove();
+
+            return revived;
         }
     }
 }
