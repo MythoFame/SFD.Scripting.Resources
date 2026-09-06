@@ -69,6 +69,10 @@ Undocumented `Game.PlayEffect` effect names exposed as constant strings, followi
 | `FireNodeFlamethrowerStart` | `"FNFTST"` | `(float dirX, float dirY)` | FireNode flamethrower start (direction; origin = `PlayEffect` position) |
 | `FireListener` | `"FLST"` | `(int objectId)` | Fire listener (purpose unconfirmed) |
 
+# [EffectsWrapper](EffectsWrapper.cs)
+
+Typed wrappers over `Game.PlayEffect` for effects whose extra `object[]` arguments fail silently when given the wrong type. Covers `CustomFloatText` with incremental overloads (text, color, duration, scale, outline), `BulletSlowmoTrace`, `CameraShaker`, `Steam` and `TraceSpawner` — the latter accepting either an `IObject` or a raw `UniqueID` to track — plus wrappers for the undocumented effects from `EffectNamesExtra` (`MuzzleFlash`, `OutOfAmmoRecoil`, `PickupText`, `FireNodeFlamethrowerStart` and `FireListener`).
+
 # [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
 
 Returns a random `WeaponItem` whose `WeaponItemType` matches the given category. Internally draws random weapons via `Game.GetRandomWeaponItem` and spawns them transiently to inspect their type, retrying until a match is found.
