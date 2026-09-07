@@ -114,28 +114,26 @@ public partial class GameScript : GameScriptInterfaceExtended
             Game.PlayEffect(EffectName.Steam, pos, steamColor, steamScale, fadeSpeed);
 
         /// <summary>
-        /// Plays the <see cref="EffectName.TraceSpawner"/> effect at the given position.
+        /// Plays the <see cref="EffectName.TraceSpawner"/> effect.
         /// Shows effects on a moving target with an even distribution depending on how
         /// fast the target is moving.
         /// </summary>
-        /// <param name="pos">World position of the effect.</param>
         /// <param name="target">Object to track.</param>
         /// <param name="effectID">Effect to keep spawning on the object.</param>
         /// <param name="spawnTime">How long the trace spawner stays alive.</param>
-        public static void PlayTraceSpawner(Vector2 pos, IObject target, string effectID, float spawnTime) =>
-            Game.PlayEffect(EffectName.TraceSpawner, pos, target.UniqueID, effectID, spawnTime);
+        public static void PlayTraceSpawner(IObject target, string effectID, float spawnTime) =>
+            Game.PlayEffect(EffectName.TraceSpawner, Vector2.Zero, target.UniqueID, effectID, spawnTime);
 
         /// <summary>
-        /// Plays the <see cref="EffectName.TraceSpawner"/> effect at the given position.
+        /// Plays the <see cref="EffectName.TraceSpawner"/> effect.
         /// Shows effects on a moving target with an even distribution depending on how
         /// fast the target is moving.
         /// </summary>
-        /// <param name="pos">World position of the effect.</param>
         /// <param name="uniqueID">Unique ID of the object to track.</param>
         /// <param name="effectID">Effect to keep spawning on the object.</param>
         /// <param name="spawnTime">How long the trace spawner stays alive.</param>
-        public static void PlayTraceSpawner(Vector2 pos, int uniqueID, string effectID, float spawnTime) =>
-            Game.PlayEffect(EffectName.TraceSpawner, pos, uniqueID, effectID, spawnTime);
+        public static void PlayTraceSpawner(int uniqueID, string effectID, float spawnTime) =>
+            Game.PlayEffect(EffectName.TraceSpawner, Vector2.Zero, uniqueID, effectID, spawnTime);
 
         /// <summary>
         /// Plays the <see cref="EffectNamesExtra.MuzzleFlash"/> effect at the given position.
