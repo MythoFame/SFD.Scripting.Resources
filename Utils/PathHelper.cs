@@ -41,6 +41,9 @@ public partial class GameScript : GameScriptInterfaceExtended
                     IObjectPathNode nodeA = conn.GetPathNodeA();
                     IObjectPathNode nodeB = conn.GetPathNodeB();
 
+                    // Skip connections with missing nodes
+                    if (nodeA is null || nodeB is null) continue;
+
                     // Ensure nodes are valid
                     if (!IsPathNodeValid(nodeA) || !IsPathNodeValid(nodeB)) continue;
 
