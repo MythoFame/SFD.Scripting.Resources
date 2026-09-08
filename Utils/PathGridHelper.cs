@@ -10,6 +10,8 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// </summary>
     public static class PathGridHelper
     {
+        private const string SPAWN_MARKER_NAME = "SpawnPlayer";
+
         private static readonly PathNodeType[] _validNodeTypes = [
             PathNodeType.Ground,
             PathNodeType.Platform
@@ -98,7 +100,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             get
             {
                 // Get all player spawn markers
-                IObject[] spawns = Game.GetObjects("SpawnPlayer");
+                IObject[] spawns = Game.GetObjectsByName(SPAWN_MARKER_NAME);
 
                 if (spawns.Length == 0) return Vector2.Zero;
 
