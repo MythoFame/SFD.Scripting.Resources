@@ -5,7 +5,8 @@ namespace SFD.Scripting.Resources;
 public partial class GameScript : GameScriptInterfaceExtended
 {
     /// <summary>
-    /// Helpers for working with the map's pathfinding nodes and connections.
+    /// Helpers for working with the map's pathfinding nodes, connections and player
+    /// spawn markers.
     /// </summary>
     public static class PathHelper
     {
@@ -85,6 +86,24 @@ public partial class GameScript : GameScriptInterfaceExtended
                 float t = (float)Random.Shared.NextDouble();
 
                 return segment[0] + (segment[1] - segment[0]) * t;
+            }
+        }
+
+        /// <summary>
+        /// Returns the position of a random player spawn marker, or
+        /// <see cref="Vector2.Zero"/> when the map contains none.
+        /// </summary>
+        public static Vector2 GetRandomSpawnPosition
+        {
+            get
+            {
+                // Get all player spawn markers
+                IObject[] spawns = Game.GetObjects("SpawnPlayer");
+
+                if (spawns.Length == 0) return Vector2.Zero;
+
+                // Pick a random spawn marker
+                return spawns[Random.Shared.Next(spawns.Length)].GetWorldPosition();
             }
         }
 

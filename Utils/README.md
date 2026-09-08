@@ -94,7 +94,7 @@ Reusable string parsers for common SFD types, aimed at chat commands. `ParseUser
 
 # [PathHelper](PathHelper.cs)
 
-Helpers for the map's pathfinding grid. `GetRandomPathGridPosition` returns a random point along a random valid path node connection — enabled `Default` connections between enabled `Ground`/`Platform` nodes — or `Vector2.Zero` when the map contains no valid connections. Useful for spawning objects or effects at plausible walkable positions.
+Helpers for the map's pathfinding grid. `GetRandomPathGridPosition` returns a random point along a random valid path node connection — enabled `Default` connections between enabled `Ground`/`Platform` nodes — or `Vector2.Zero` when the map contains no valid connections. Useful for spawning objects or effects at plausible walkable positions. `GetRandomSpawnPosition` returns the position of a random `SpawnPlayer` marker, or `Vector2.Zero` when the map contains none.
 
 # [PlayerHelper](PlayerHelper.cs)
 
