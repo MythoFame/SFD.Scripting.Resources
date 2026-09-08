@@ -14,22 +14,22 @@ public partial class GameScript : GameScriptInterfaceExtended
             PathNodeType.Platform
         ];
 
+        private static List<Vector2[]> _segments = null;
+
         /// <summary>
-        /// Returns a random position along a random valid path node connection, or
-        /// <see cref="Vector2.Zero"/> when the map contains no valid connections.
+        /// Gets the segments of all valid path node connections, computed once and
+        /// cached, as path nodes are static.
         /// </summary>
-        /// <remarks>
-        /// A connection is valid when it is enabled, has the
-        /// <see cref="PathNodeConnectionType.Default"/> type and links two enabled nodes
-        /// of the <see cref="PathNodeType.Ground"/> or <see cref="PathNodeType.Platform"/>
-        /// types. Every valid connection contributes the segment between its nodes, and a
-        /// point is picked uniformly along the chosen segment.
-        /// </remarks>
-        public static Vector2 GetRandomPathGridPosition
+        private static List<Vector2[]> Segments
         {
             get
             {
-                List<Vector2[]> segments = [];
+                if (_segments is not null)
+                {
+                    return _segments;
+                }
+
+                _segments = [];
 
                 // Get all path node connections
                 foreach (IObjectPathNodeConnection conn in Game.GetObjects<IObjectPathNodeConnection>())
@@ -47,15 +47,34 @@ public partial class GameScript : GameScriptInterfaceExtended
                     // Ensure nodes are valid
                     if (!IsPathNodeValid(nodeA) || !IsPathNodeValid(nodeB)) continue;
 
-                    // Get world positions
-                    Vector2 posA = nodeA.GetWorldPosition();
-                    Vector2 posB = nodeB.GetWorldPosition();
-
-                    segments.Add([
-                        posA,
-                        posB
+                    _segments.Add([
+                        nodeA.GetWorldPosition(),
+                        nodeB.GetWorldPosition()
                     ]);
                 }
+
+                return _segments;
+            }
+        }
+
+        /// <summary>
+        /// Returns a random position along a random valid path node connection, or
+        /// <see cref="Vector2.Zero"/> when the map contains no valid connections.
+        /// </summary>
+        /// <remarks>
+        /// A connection is valid when it is enabled, has the
+        /// <see cref="PathNodeConnectionType.Default"/> type and links two enabled nodes
+        /// of the <see cref="PathNodeType.Ground"/> or <see cref="PathNodeType.Platform"/>
+        /// types. Connections with missing nodes are skipped, and the segments are
+        /// computed once and cached, as path nodes are static. Every valid connection
+        /// contributes the segment between its nodes, and a point is picked uniformly
+        /// along the chosen segment.
+        /// </remarks>
+        public static Vector2 GetRandomPathGridPosition
+        {
+            get
+            {
+                List<Vector2[]> segments = Segments;
 
                 if (segments.Count == 0) return Vector2.Zero;
 
