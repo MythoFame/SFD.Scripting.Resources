@@ -77,14 +77,13 @@ public partial class GameScript : GameScriptInterfaceExtended
             Game.PlayEffect(EffectName.BulletSlowmoTrace, pos, dir.X, dir.Y);
 
         /// <summary>
-        /// Plays the <see cref="EffectName.CameraShaker"/> effect at the given position.
+        /// Plays the <see cref="EffectName.CameraShaker"/> effect.
         /// The shake is always applied globally.
         /// </summary>
-        /// <param name="pos">World position of the effect.</param>
         /// <param name="intensity">Intensity of the camera shake.</param>
         /// <param name="time">Duration of the camera shake.</param>
-        public static void PlayCameraShaker(Vector2 pos, float intensity, float time) =>
-            Game.PlayEffect(EffectName.CameraShaker, pos, intensity, time, true);
+        public static void PlayCameraShaker(float intensity, float time) =>
+            Game.PlayEffect(EffectName.CameraShaker, Vector2.Zero, intensity, time, true);
 
         /// <summary>
         /// Plays the <see cref="EffectName.Steam"/> effect at the given position.
