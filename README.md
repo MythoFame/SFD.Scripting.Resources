@@ -29,7 +29,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `HomingProjectile`
 - `NodeProjectile`
 - `ParseHelper`
-- `PathHelper`
+- `PathGridHelper`
 - `PlayerHelper`
 - `ProjectileHelper`
 - `PointShape`
