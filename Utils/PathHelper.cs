@@ -7,7 +7,7 @@ public partial class GameScript : GameScriptInterfaceExtended
     /// <summary>
     /// Helpers for working with the map's pathfinding nodes and connections.
     /// </summary>
-    public static class PathHelpers
+    public static class PathHelper
     {
         private static readonly PathNodeType[] _validNodeTypes = [
             PathNodeType.Ground,
