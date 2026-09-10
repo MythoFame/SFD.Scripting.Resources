@@ -15,6 +15,23 @@ public void OnStartup()
 public static void OnGameOver() => Game.WriteToConsoleF("Game over!");
 ```
 
+# [OnDialogueCallback](OnDialogueCallback.cs)
+
+Polls `Game.GetDialogues` on an update loop and fires the supplied callback once for each new dialogue, tracked by `IDialogue.ID`. Useful for reacting to dialogues created by the game or other scripts without manually polling the dialogue list each update.
+
+Example usage:
+
+```cs
+OnDialogueCallback _dialogueEvent = null;
+
+public void OnStartup()
+{
+    _dialogueEvent = OnDialogueCallback.Start(OnDialogue);
+}
+
+public static void OnDialogue(IDialogue dialogue) => Game.WriteToConsoleF($"New dialogue from {dialogue.Name}!");
+```
+
 # [PlayerKillCallback](PlayerKillCallback.cs)
 
 Fires a callback whenever a player is killed by another player. Wraps the built-in `PlayerDamageCallback` and `PlayerDeathCallback` to track the last attacker (via melee source or projectile's initial owner) and report them at the moment of death.

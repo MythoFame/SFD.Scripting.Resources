@@ -47,6 +47,7 @@ Custom callbacks that wrap the existing SFD script API events, providing higher-
 **Available events:**
 
 - `GameOverCallback`
+- `OnDialogueCallback`
 - `PlayerKillCallback`
 
 See [`Events/README.md`](Events/README.md) for detailed documentation on each event.
