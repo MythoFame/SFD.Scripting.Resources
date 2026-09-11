@@ -61,13 +61,21 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <param name="player">The first player.</param>
         /// <param name="other">The player to compare against.</param>
         /// <returns>Whether the players are enemies.</returns>
-        public static bool IsEnemy(IPlayer player, IPlayer other)
-        {
-            PlayerTeam team = player.GetTeam();
-            PlayerTeam otherTeam = other.GetTeam();
+        public static bool IsEnemy(IPlayer player, IPlayer other) => IsEnemy(player.GetTeam(), other.GetTeam());
 
-            return team == PlayerTeam.Independent || otherTeam == PlayerTeam.Independent || team != otherTeam;
-        }
+        /// <summary>
+        /// Determines whether two teams are enemies. <see cref="PlayerTeam.Independent"/> is an enemy of everyone;
+        /// otherwise, two teams are enemies unless they are the same.
+        /// </summary>
+        /// <param name="team">The first team.</param>
+        /// <param name="otherTeam">The second team.</param>
+        /// <returns>Whether the teams are enemies.</returns>
+        /// <remarks>
+        /// If you are trying to check if two <see cref="IPlayer"/> instances are enemies, use <see cref="IsEnemy(IPlayer,IPlayer)"/>
+        /// instead.
+        /// </remarks>
+        public static bool IsEnemy(PlayerTeam team, PlayerTeam otherTeam) => team == PlayerTeam.Independent ||
+            otherTeam == PlayerTeam.Independent || team != otherTeam;
 
         /// <summary>
         /// Gets the current sound effect that should be run for a projectile hit effect given the hit effect type.
