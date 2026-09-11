@@ -10,6 +10,7 @@ public partial class GameScript : GameScriptInterfaceExtended
     public static class PlayerHelper
     {
         private static readonly Vector2 _stickyFeetTransition = new(0, 2);
+        private static readonly Color _respawnColor = new(242, 157, 208);
 
         /// <summary>
         /// Nudges a player upward by a small offset, useful for freeing them when they are
@@ -177,6 +178,36 @@ public partial class GameScript : GameScriptInterfaceExtended
             spawned.SetTeam(user.GetTeam());
 
             return spawned;
+        }
+
+        /// <summary>
+        /// Respawns a player after the specified delay, announcing the remaining seconds
+        /// in the user's chat each second.
+        /// </summary>
+        /// <param name="user">The user to respawn.</param>
+        /// <param name="pos">The position to respawn at.</param>
+        /// <param name="delay">The delay in milliseconds before respawning.</param>
+        public static void Respawn(IUser user, Vector2 pos, uint delay)
+        {
+            float endTime = Game.TotalElapsedGameTime + delay;
+
+            Events.UpdateCallback respawnUpdate = Game.Events.StartUpdateCallback(_ =>
+            {
+                int secondsLeft = (int)MathF.Ceiling((endTime - Game.TotalElapsedGameTime) / 1000f);
+
+                Game.ShowChatMessage($"You will spawn in {secondsLeft} seconds...",
+                    _respawnColor, user.UserIdentifier);
+            }, 1000);
+
+            respawnUpdate.Invoke(0);
+
+            Game.Events.StartUpdateCallback(dlt =>
+            {
+                respawnUpdate.Stop();
+                respawnUpdate = null;
+
+                Spawn(user, pos);
+            }, delay, 1);
         }
 
         /// <summary>
