@@ -143,27 +143,61 @@ public partial class GameScript : GameScriptInterfaceExtended
                 return null;
             }
 
-            IPlayer revived = Game.CreatePlayer(player.GetWorldPosition());
-
             IUser user = player.GetUser();
 
-            if (user != null)
-            {
-                if (user.IsBot)
-                {
-                    revived.SetBotBehavior(new BotBehavior(true, user.BotPredefinedAIType));
-                }
+            IPlayer revived = user is not null
+                ? CreatePlayerWithUser(user, player.GetWorldPosition())
+                : Game.CreatePlayer(player.GetWorldPosition());
 
-                revived.SetUser(user);
+            if (user is null)
+            {
+                revived.SetProfile(player.GetProfile());
+                revived.SetTeam(player.GetTeam());
             }
 
-            revived.SetProfile(player.GetProfile());
-            revived.SetTeam(player.GetTeam());
             revived.SetInputMode(player.InputMode);
 
             player.Remove();
 
             return revived;
+        }
+
+        /// <summary>
+        /// Spawns a player with the given user and position, using the user's profile and
+        /// team, and sets the user for the spawned player.
+        /// </summary>
+        /// <param name="user">The user to spawn.</param>
+        /// <param name="pos">The position to spawn at.</param>
+        /// <returns>The spawned player.</returns>
+        public static IPlayer Spawn(IUser user, Vector2 pos)
+        {
+            IPlayer spawned = CreatePlayerWithUser(user, pos);
+
+            spawned.SetProfile(user.GetProfile());
+            spawned.SetTeam(user.GetTeam());
+
+            return spawned;
+        }
+
+        /// <summary>
+        /// Creates a player at the given position and attaches the given user to it,
+        /// applying bot behavior when the user is a bot.
+        /// </summary>
+        /// <param name="user">The user to attach.</param>
+        /// <param name="pos">The position to create the player at.</param>
+        /// <returns>The created player.</returns>
+        private static IPlayer CreatePlayerWithUser(IUser user, Vector2 pos)
+        {
+            IPlayer player = Game.CreatePlayer(pos);
+
+            if (user.IsBot)
+            {
+                player.SetBotBehavior(new(true, user.BotPredefinedAIType));
+            }
+
+            player.SetUser(user);
+
+            return player;
         }
     }
 }
