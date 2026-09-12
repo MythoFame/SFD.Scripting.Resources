@@ -162,6 +162,14 @@ public partial class GameScript : GameScriptInterfaceExtended
             revived.SetTeam(player.GetTeam());
             revived.SetInputMode(player.InputMode);
 
+            if (player.IsFalling)
+            {
+                revived.Fall();
+            }
+
+            revived.SetLinearVelocity(player.GetLinearVelocity());
+            revived.SetAngularVelocity(player.GetAngularVelocity());
+
             player.Remove();
 
             return revived;
