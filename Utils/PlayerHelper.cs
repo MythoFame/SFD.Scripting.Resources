@@ -217,18 +217,7 @@ public partial class GameScript : GameScriptInterfaceExtended
                 respawnUpdate.Stop();
                 respawnUpdate = null;
 
-                IPlayer spawned = Game.CreatePlayer(pos);
-
-                spawned.SetTeam(user.GetTeam());
-                spawned.SetProfile(user.GetProfile());
-
-                if (user.IsBot)
-                {
-                    spawned.SetBotBehavior(new BotBehavior(true,
-                    user.BotPredefinedAIType));
-                }
-
-                spawned.SetUser(user);
+                Spawn(user, pos);
             }, delay, 1);
         }
     }
