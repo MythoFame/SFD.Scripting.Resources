@@ -73,40 +73,44 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// contributes the segment between its nodes, and a point is picked uniformly
         /// along the chosen segment.
         /// </remarks>
-        public static Vector2 GetRandomPathGridPosition
+        public static Vector2 GetRandomPathGridPosition(Random random)
         {
-            get
-            {
-                List<Vector2[]> segments = Segments;
+            List<Vector2[]> segments = Segments;
 
-                if (segments.Count == 0) return Vector2.Zero;
+            if (segments.Count == 0) return Vector2.Zero;
 
-                // Pick a random segment
-                Vector2[] segment = segments[Random.Shared.Next(segments.Count)];
+            // Pick a random segment
+            Vector2[] segment = segments[Random.Shared.Next(segments.Count)];
 
-                // Calculate a random point on the segment
-                float t = (float)Random.Shared.NextDouble();
+            // Calculate a random point on the segment
+            float t = (float)random.NextDouble();
 
-                return segment[0] + (segment[1] - segment[0]) * t;
-            }
+            return segment[0] + (segment[1] - segment[0]) * t;
         }
 
         /// <summary>
         /// Returns the position of a random player spawn marker, or
         /// <see cref="Vector2.Zero"/> when the map contains none.
         /// </summary>
-        public static Vector2 GetRandomSpawnPosition
+        public static Vector2 GetRandomSpawnPosition(Random random)
         {
-            get
-            {
-                // Get all player spawn markers
-                IObject[] spawns = Game.GetObjectsByName(SPAWN_MARKER_NAME);
+            // Get all player spawn markers
+            IObject[] spawns = Game.GetObjectsByName(SPAWN_MARKER_NAME);
 
-                if (spawns.Length == 0) return Vector2.Zero;
+            if (spawns.Length == 0) return Vector2.Zero;
 
-                // Pick a random spawn marker
-                return spawns[Random.Shared.Next(spawns.Length)].GetWorldPosition();
-            }
+            // Pick a random spawn marker
+            return spawns[random.Next(spawns.Length)].GetWorldPosition();
+        }
+
+        /// <summary>
+        /// Returns a random position at the top edge of the camera's maximum area.
+        /// </summary>
+        public static Vector2 GetSkyPosition(Random random)
+        {
+            Area area = Game.GetCameraMaxArea();
+
+            return new(area.Left + random.NextSingle() * area.Width, area.Top);
         }
 
         /// <summary>
