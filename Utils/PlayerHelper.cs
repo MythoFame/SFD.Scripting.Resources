@@ -170,6 +170,12 @@ public partial class GameScript : GameScriptInterfaceExtended
             revived.SetLinearVelocity(player.GetLinearVelocity());
             revived.SetAngularVelocity(player.GetAngularVelocity());
 
+            revived.GiveWeaponItem(player.CurrentMeleeWeapon.WeaponItem);
+            revived.GiveWeaponItem(player.CurrentSecondaryWeapon.WeaponItem);
+            revived.GiveWeaponItem(player.CurrentPrimaryWeapon.WeaponItem);
+            revived.GiveWeaponItem(player.CurrentThrownItem.WeaponItem);
+            revived.GiveWeaponItem(player.CurrentPowerupItem.WeaponItem);
+
             player.Remove();
 
             return revived;
