@@ -25,7 +25,6 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `CustomProjectile`
 - `EffectNamesExtra`
 - `EffectsWrapper`
-- `GetRandomWeaponFromType`
 - `HomingProjectile`
 - `NodeProjectile`
 - `ParseHelper`
@@ -37,6 +36,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `SoundsDatabase`
 - `TilesDatabase`
 - `Vector2Helper`
+- `WeaponHelper`
 
 See [`Utils/README.md`](Utils/README.md) for detailed documentation on each utility.
 

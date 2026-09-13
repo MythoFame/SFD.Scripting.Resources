@@ -73,10 +73,6 @@ Undocumented `Game.PlayEffect` effect names exposed as constant strings, followi
 
 Typed wrappers over `Game.PlayEffect` for effects whose extra `object[]` arguments fail silently when given the wrong type. Provides incremental overloads for `CustomFloatText`, `Steam` and `TraceSpawner` — the latter accepting either an `IObject` or a raw `UniqueID` to track — plus `BulletSlowmoTrace`, `CameraShaker` (always applied globally) and `Vector2` overloads for the direction-based effects. Also wraps the undocumented effects from `EffectNamesExtra` (`MuzzleFlash`, `OutOfAmmoRecoil`, `PickupText`, `FireNodeFlamethrowerStart` and `FireListener`).
 
-# [GetRandomWeaponFromType](GetRandomWeaponFromType.cs)
-
-Returns a random `WeaponItem` whose `WeaponItemType` matches the given category. Internally draws random weapons via `Game.GetRandomWeaponItem` and spawns them transiently to inspect their type, retrying until a match is found.
-
 # [HomingProjectile](HomingProjectile.cs)
 
 Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Owner` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
@@ -125,3 +121,7 @@ Auto-generated database of every in-game tile and object name as constant string
 # [Vector2Helper](Vector2Helper.cs)
 
 A math utility class for `Vector2` offering operations not built into the SFD API: angles, dot/cross products, reflection and bouncing, projection, rotation, clamping, length limiting, move-toward, and more. Also exposes the `Up`/`Down`/`Left`/`Right` unit vectors.
+
+# [WeaponHelper](WeaponHelper.cs)
+
+Helpers for working with `WeaponItem` and `WeaponItemType`. `GetRandomWeaponFromType` draws random weapons via `Game.GetRandomWeaponItem` (excluding `STREETSWEEPER`), transiently spawning each with a near-zero despawn time to inspect its `WeaponItemType` until one matches. `GetDefaultAmmo` spawns a weapon transiently to query its default ammo amount, then removes it.
