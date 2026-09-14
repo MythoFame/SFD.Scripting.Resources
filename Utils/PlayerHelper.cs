@@ -161,6 +161,7 @@ public partial class GameScript : GameScriptInterfaceExtended
             revived.SetProfile(player.GetProfile());
             revived.SetTeam(player.GetTeam());
             revived.SetInputMode(player.InputMode);
+            revived.SetBotName(player.Name);
 
             if (player.IsFalling)
             {
