@@ -14,6 +14,50 @@ public partial class GameScript : GameScriptInterfaceExtended
     public static class ParseHelper
     {
         /// <summary>
+        /// Splits a raw command-argument string on whitespace, keeping
+        /// double-quoted sections together as single tokens with the quotes
+        /// stripped (e.g. <c>kill "my player" gib</c> yields
+        /// <c>"my player"</c> and <c>"gib"</c>). Unmatched quotes run to the
+        /// end of the string. Yields nothing for null or blank input.
+        /// </summary>
+        /// <param name="input">The raw argument string to tokenize.</param>
+        public static IEnumerable<string> SplitArguments(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                yield break;
+
+            System.Text.StringBuilder token = new();
+            bool inQuotes = false;
+            bool hasToken = false;
+
+            foreach (char c in input)
+            {
+                if (c == '"')
+                {
+                    inQuotes = !inQuotes;
+                    hasToken = true;
+                }
+                else if (!inQuotes && char.IsWhiteSpace(c))
+                {
+                    if (hasToken)
+                    {
+                        yield return token.ToString();
+                        token.Clear();
+                        hasToken = false;
+                    }
+                }
+                else
+                {
+                    token.Append(c);
+                    hasToken = true;
+                }
+            }
+
+            if (hasToken)
+                yield return token.ToString();
+        }
+
+        /// <summary>
         /// Bitmask of the parsing operations a parser should attempt. Flags are
         /// evaluated in a fixed, secure order regardless of their bit values — index,
         /// then account name, then name, and finally special tokens — so an identifier
