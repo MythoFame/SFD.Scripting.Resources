@@ -89,6 +89,29 @@ public partial class GameScript : GameScriptInterfaceExtended
         }
 
         /// <summary>
+        /// Forces the first letter to upper case, e.g. balaclava to Balaclava.
+        /// </summary>
+        public static string Capitalize(string value) =>
+            string.IsNullOrEmpty(value) ? value : char.ToUpper(value[0]) + value[1..];
+
+        /// <summary>
+        /// Maps a color name to its clothing package name, e.g. red to
+        /// ClothingRed and lightgrey to ClothingLightGrey. Empty stays empty.
+        /// </summary>
+        public static string ToColorPackage(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return "";
+
+            if (value.StartsWith("light", StringComparison.OrdinalIgnoreCase) && value.Length > 5)
+                return "ClothingLight" + Capitalize(value[5..]);
+
+            if (value.StartsWith("dark", StringComparison.OrdinalIgnoreCase) && value.Length > 4)
+                return "ClothingDark" + Capitalize(value[4..]);
+
+            return "Clothing" + Capitalize(value);
+        }
+
+        /// <summary>
         /// Converts a named color string to a Color member.
         /// </summary>
         /// <param name="name">The named color string.</param>
