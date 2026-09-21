@@ -13,10 +13,15 @@ public partial class GameScript : GameScriptInterfaceExtended
         private static readonly Color _respawnColor = new(242, 157, 208);
 
         /// <summary>
-        /// Nudges a player upward by a small offset, useful for freeing them when they are
-        /// stuck on terrain edges or inside geometry.
+        /// Nudges a player upward by a small offset when they are on the
+        /// ground, useful for freeing them when they are stuck on terrain
+        /// edges or inside geometry. Airborne players are left untouched.
         /// </summary>
-        public static void Unstick(IPlayer player) => player.SetWorldPosition(player.GetWorldPosition() + _stickyFeetTransition);
+        public static void Unstick(IPlayer player)
+        {
+            if (player.IsOnGround)
+                player.SetWorldPosition(player.GetWorldPosition() + _stickyFeetTransition);
+        }
 
         /// <summary>
         /// Determines whether a player is currently firing by manually aiming, accounting for
