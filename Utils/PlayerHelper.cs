@@ -11,6 +11,7 @@ public partial class GameScript : GameScriptInterfaceExtended
     {
         private static readonly Vector2 _stickyFeetTransition = new(0, 2);
         private static readonly Color _respawnColor = new(242, 157, 208);
+        private static readonly VirtualKey[] _keys = Enum.GetValues<VirtualKey>();
 
         /// <summary>
         /// Nudges a player upward by a small offset when they are on the
@@ -51,6 +52,24 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// Determines whether the player is dodging and can be hit by projectiles.
         /// </summary>
         public static bool IsDodging(IPlayer player) => player.IsRolling || player.IsDiving;
+
+        /// <summary>
+        /// Determines whether the player is pressing any key.
+        /// </summary>
+        /// <param name="player">The player to check.</param>
+        /// <returns>Whether any <see cref="VirtualKey"/> is currently pressed.</returns>
+        public static bool AnyKeyPressed(IPlayer player)
+        {
+            foreach (VirtualKey key in _keys)
+            {
+                if (player.KeyPressed(key))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Gets whether a player currently has a ranged weapon, whether it be the
