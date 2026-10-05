@@ -16,6 +16,16 @@ public partial class GameScript : GameScriptInterfaceExtended
         private static Events.UserMessageCallback _callback = null;
 
         /// <summary>
+        /// Who is allowed to execute a command.
+        /// </summary>
+        public enum Permission
+        {
+            All,
+            ModeratorOnly,
+            HostOnly
+        }
+
+        /// <summary>
         /// All commands currently registered with the handler. Fully public and
         /// mutable (Add, Remove, Clear, indexer, foreach, LINQ, etc. all work as
         /// normal) — the collection itself manages the subscription lifecycle.
@@ -32,22 +42,21 @@ public partial class GameScript : GameScriptInterfaceExtended
             Game.ShowChatMessage("Available commands:", Color.Green, user.UserIdentifier);
 
             IOrderedEnumerable<Command> commands = ActiveCommands
-                .OrderBy(cmd => cmd.ModeratorOnly)
-                .ThenBy(cmd => cmd.HostOnly)
+                .OrderBy(cmd => cmd.Permission)
                 .ThenBy(cmd => cmd.Name);
 
             foreach (Command command in commands)
             {
-                if (command.ModeratorOnly && !user.IsModerator) continue;
-                if (command.HostOnly && !user.IsHost) continue;
+                if (command.Permission == Permission.ModeratorOnly && !user.IsModerator) continue;
+                if (command.Permission == Permission.HostOnly && !user.IsHost) continue;
 
                 string displayTxt = $"/{command.Name} ";
 
                 if (command.Description != null)
                     displayTxt += command.Description;
 
-                Color color = command.HostOnly ? Color.Magenta
-                    : command.ModeratorOnly ? Color.Yellow
+                Color color = command.Permission == Permission.HostOnly ? Color.Magenta
+                    : command.Permission == Permission.ModeratorOnly ? Color.Yellow
                     : Color.Green;
 
                 Game.ShowChatMessage(displayTxt, color, args.User.UserIdentifier);
@@ -57,8 +66,7 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <summary>
         /// Invoked for every user message. When the message is a command, locates the
         /// matching <see cref="Command"/> in <see cref="ActiveCommands"/>, enforces its
-        /// <see cref="Command.ModeratorOnly"/> and <see cref="Command.HostOnly"/>
-        /// permissions, and fires its callback.
+        /// <see cref="Command.Permission"/> permissions, and fires its callback.
         /// </summary>
         private static void OnUserMessage(UserMessageCallbackArgs args)
         {
@@ -71,8 +79,8 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             IUser user = args.User;
 
-            if ((!user.IsModerator && commandActivated.ModeratorOnly)
-                || (!user.IsHost && commandActivated.HostOnly))
+            if ((commandActivated.Permission == Permission.ModeratorOnly && !user.IsModerator)
+                || (commandActivated.Permission == Permission.HostOnly && !user.IsHost))
             {
                 Game.ShowChatMessage("You don't have permission to use this command.",
                     Color.Red, user.UserIdentifier);
@@ -150,14 +158,9 @@ public partial class GameScript : GameScriptInterfaceExtended
             }
 
             /// <summary>
-            /// Whether the command requires a moderator to execute it. By default false.
+            /// Who is allowed to execute this command. By default <see cref="Permission.All"/>.
             /// </summary>
-            public bool ModeratorOnly = false;
-
-            /// <summary>
-            /// Whether the command requires the host to execute it. By default false.
-            /// </summary>
-            public bool HostOnly = false;
+            public Permission Permission = Permission.All;
 
             /// <summary>
             /// The human-readable description to show when the user requests command help.
