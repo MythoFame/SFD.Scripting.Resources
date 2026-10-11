@@ -79,7 +79,7 @@ Extends `CustomProjectile` with self-steering behavior. Each update it rotates i
 
 # [ImageHelper](ImageHelper.cs)
 
-Helpers for loading and rendering Base64 frame-data images as text objects (`BgText`/`Text`). `GetFrames` decodes `_`-joined frames — Base64 of `[width:u32][height:u32][pixels: w*h*4 RGBA]`, little-endian, row-major — caching each frame by FNV-1a hash, and returns null when the data is missing or invalid. `Render` spawns one text object per pixel centered at a position, top row first, in per-tick batches sized inversely to the pixel count, then animates multi-frame images on a 100ms timer until a pixel is removed.
+Helpers for loading and rendering Base64 frame-data images as text objects. Reference implementation of the frame data format of https://github.com/MythoFame/SFD.ImageGenerator.
 
 # [NodeProjectile](NodeProjectile.cs)
 
