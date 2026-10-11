@@ -6,13 +6,14 @@ public partial class GameScript : GameScriptInterfaceExtended
 {
     /// <summary>
     /// Helpers for loading and rendering Base64 frame data images.
-    /// Format per frame: Base64 of [width:u32][height:u32][pixels: w*h*4 RGBA],
-    /// little-endian, row-major, top-left origin. Frames are joined by '_'.
+    /// Format per frame: Base64 of [width:u32][height:u32][pixels: w*h*3 RGB],
+    /// little-endian, row-major, top-left origin. No alpha; text objects
+    /// don't support transparency. Frames are joined by '_'.
     /// </summary>
     public static class ImageHelper
     {
         /// <summary>
-        /// A single decoded image frame: raw RGBA pixels with its dimensions.
+        /// A single decoded image frame: raw RGB pixels with its dimensions.
         /// </summary>
         public class DecodedImage
         {
@@ -186,14 +187,14 @@ public partial class GameScript : GameScriptInterfaceExtended
             int height = BitConverter.ToInt32(data, 4);
 
             if (width < 1 || height < 1) return null;
-            if ((long)width * height * 4 + 8 != data.Length) return null;
+            if ((long)width * height * 3 + 8 != data.Length) return null;
 
             Color[] pixels = new Color[width * height];
 
             for (int i = 0; i < pixels.Length; i++)
             {
-                int o = 8 + i * 4;
-                pixels[i] = new Color(data[o], data[o + 1], data[o + 2], data[o + 3]);
+                int o = 8 + i * 3;
+                pixels[i] = new Color(data[o], data[o + 1], data[o + 2]);
             }
 
             return new DecodedImage { Pixels = pixels, Width = width, Height = height };
