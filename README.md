@@ -26,6 +26,7 @@ A collection of reusable helper classes for Superfighters Deluxe scripting — r
 - `EffectNamesExtra`
 - `EffectsWrapper`
 - `HomingProjectile`
+- `ImageHelper`
 - `NodeProjectile`
 - `ParseHelper`
 - `PathGridHelper`

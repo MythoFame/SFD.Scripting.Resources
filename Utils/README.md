@@ -77,6 +77,10 @@ Typed wrappers over `Game.PlayEffect` for effects whose extra `object[]` argumen
 
 Extends `CustomProjectile` with self-steering behavior. Each update it rotates its direction towards a target position — by default the closest living enemy of `Owner` — with `Homing` (0–1) controlling how aggressively it turns. Override `GetHomingTargetPosition` to implement custom targeting.
 
+# [ImageHelper](ImageHelper.cs)
+
+Helpers for loading and rendering Base64 frame-data images as text objects (`BgText`/`Text`). `GetFrames` decodes `_`-joined frames — Base64 of `[width:u32][height:u32][pixels: w*h*4 RGBA]`, little-endian, row-major — caching each frame by FNV-1a hash, and returns null when the data is missing or invalid. `Render` spawns one text object per pixel centered at a position, top row first, in per-tick batches sized inversely to the pixel count, then animates multi-frame images on a 100ms timer until a pixel is removed.
+
 # [NodeProjectile](NodeProjectile.cs)
 
 Extends `CustomProjectile` with FireNode-like physics: forward travel, gravity pull, horizontal friction, and a configurable lifetime. While airborne it casts swept raycasts along its traveled path (like the base class), so it can hit players reliably in flight. Once it settles on a surface, collision detection switches to a vertical raycast segment centered on the projectile. With `Lingering` enabled the projectile settles on non-destructible surfaces instead of being disabled, and keeps sensing nearby targets every 50ms like a proximity mine until `Lifetime` expires.
