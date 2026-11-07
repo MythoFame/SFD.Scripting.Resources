@@ -71,7 +71,9 @@ public partial class GameScript : GameScriptInterfaceExtended
             None = 0,
 
             /// <summary>
-            /// Match a numeric input. For users this matches <see cref="IUser.GameSlotIndex"/>;
+            /// Match a numeric input or inclusive <c>start..end</c> range. Range endpoints
+            /// must be non-negative integers with <c>start</c> less than or equal to
+            /// <c>end</c>. For users this matches <see cref="IUser.GameSlotIndex"/>;
             /// for players it indexes the array returned by <see cref="IGame.GetPlayers()"/>,
             /// which tracks the game slots and continues into the remaining players.
             /// </summary>
@@ -93,10 +95,27 @@ public partial class GameScript : GameScriptInterfaceExtended
             Everything = ByIndex | ByAccountName | ByName | SpecialTokens
         }
 
+        private static bool TryParseIndexRange(string input, out int start, out int end)
+        {
+            start = 0;
+            end = -1;
+
+            string[] parts = input.Split("..");
+
+            if (parts.Length != 2)
+                return false;
+
+            if (!int.TryParse(parts[0], out start) || !int.TryParse(parts[1], out end))
+                return false;
+
+            return start >= 0 && start <= end;
+        }
+
         /// <summary>
         /// Resolves a string against the active users (<see cref="IGame.GetActiveUsers"/>)
         /// using the enabled <paramref name="options"/>. In order: a numeric input matches
-        /// <see cref="IUser.GameSlotIndex"/>, then <see cref="IUser.AccountName"/>, then
+        /// <see cref="IUser.GameSlotIndex"/>, an inclusive range selects users whose slot
+        /// falls in that interval, then <see cref="IUser.AccountName"/>, then
         /// <see cref="IUser.Name"/>, and finally the literal <c>"me"</c> (resolving to
         /// <paramref name="self"/> when non-null) and <c>"*"</c> (all active users).
         /// </summary>
@@ -115,6 +134,9 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             if (options.HasFlag(ParseFlags.ByIndex) && int.TryParse(input, out int slotIndex))
                 return users.Where(u => u.GameSlotIndex == slotIndex);
+
+            if (options.HasFlag(ParseFlags.ByIndex) && TryParseIndexRange(input, out int startSlot, out int endSlot))
+                return users.Where(u => u.GameSlotIndex >= startSlot && u.GameSlotIndex <= endSlot);
 
             if (options.HasFlag(ParseFlags.ByAccountName))
             {
@@ -147,7 +169,8 @@ public partial class GameScript : GameScriptInterfaceExtended
         /// <summary>
         /// Resolves a string against the players in the game using the enabled
         /// <paramref name="options"/>. In order: a numeric input indexes the array
-        /// returned by <see cref="IGame.GetPlayers()"/>; the string is then delegated to
+        /// returned by <see cref="IGame.GetPlayers()"/>, an inclusive range selects the
+        /// players at those array positions; the string is then delegated to
         /// <see cref="ParseUsers"/> (matching real players by account/name first), falling
         /// back to matching <see cref="IObject.Name"/> across the players to also catch
         /// externally spawned bots; finally the literal <c>"*"</c> resolves to all players.
@@ -167,6 +190,9 @@ public partial class GameScript : GameScriptInterfaceExtended
 
             if (options.HasFlag(ParseFlags.ByIndex) && int.TryParse(input, out int index))
                 return index >= 0 && index < players.Length ? [players[index]] : [];
+
+            if (options.HasFlag(ParseFlags.ByIndex) && TryParseIndexRange(input, out int startIndex, out int endIndex))
+                return players.Where((player, playerIndex) => playerIndex >= startIndex && playerIndex <= endIndex);
 
             bool userParsingEnabled =
                 options.HasFlag(ParseFlags.ByAccountName)
