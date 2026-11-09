@@ -74,8 +74,9 @@ public partial class GameScript : GameScriptInterfaceExtended
             /// Match a numeric input or inclusive <c>start..end</c> range. Range endpoints
             /// must be non-negative integers with <c>start</c> less than or equal to
             /// <c>end</c>. For users this matches <see cref="IUser.GameSlotIndex"/>;
-            /// for players it indexes the array returned by <see cref="IGame.GetPlayers()"/>,
-            /// which tracks the game slots and continues into the remaining players.
+            /// for players it matches the associated user's <see cref="IUser.GameSlotIndex"/>
+            /// when available, falling back to the position in the array returned by
+            /// <see cref="IGame.GetPlayers()"/> for players without an associated user.
             /// </summary>
             ByIndex = 1 << 0,
 
@@ -109,6 +110,19 @@ public partial class GameScript : GameScriptInterfaceExtended
                 return false;
 
             return start >= 0 && start <= end;
+        }
+
+        private static IEnumerable<IPlayer> ParsePlayersBySlot(IPlayer[] players, int start, int end)
+        {
+            return players.Where((player, playerIndex) =>
+            {
+                IUser user = player.GetUser();
+
+                if (user is not null)
+                    return user.GameSlotIndex >= start && user.GameSlotIndex <= end;
+
+                return playerIndex >= start && playerIndex <= end;
+            });
         }
 
         /// <summary>
@@ -172,9 +186,9 @@ public partial class GameScript : GameScriptInterfaceExtended
 
         /// <summary>
         /// Resolves a string against the players in the game using the enabled
-        /// <paramref name="options"/>. In order: a numeric input indexes the array
-        /// returned by <see cref="IGame.GetPlayers()"/>, an inclusive range selects the
-        /// players at those array positions; the string is then delegated to
+        /// <paramref name="options"/>. In order: a numeric input or inclusive range
+        /// selects players by associated-user slot when available, falling back to array
+        /// positions for players without an associated user; the string is then delegated to
         /// <see cref="ParseUsers"/> (matching real players by account/name first), falling
         /// back to matching <see cref="IObject.Name"/> across the players to also catch
         /// externally spawned bots; finally the literal <c>"*"</c> resolves to all players
@@ -194,10 +208,10 @@ public partial class GameScript : GameScriptInterfaceExtended
             IPlayer[] players = Game.GetPlayers();
 
             if (options.HasFlag(ParseFlags.ByIndex) && int.TryParse(input, out int index))
-                return index >= 0 && index < players.Length ? [players[index]] : [];
+                return ParsePlayersBySlot(players, index, index);
 
             if (options.HasFlag(ParseFlags.ByIndex) && TryParseIndexRange(input, out int startIndex, out int endIndex))
-                return players.Where((player, playerIndex) => playerIndex >= startIndex && playerIndex <= endIndex);
+                return ParsePlayersBySlot(players, startIndex, endIndex);
 
             bool userParsingEnabled =
                 options.HasFlag(ParseFlags.ByAccountName)
